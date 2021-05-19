@@ -1,0 +1,152 @@
+/* ----------------------------------------------------------------------------------------------------------
+                                                General CSS
+-------------------------------------------------------------------------------------------------------------*/
+body{font-family: Roboto;
+font-style: normal;
+font-weight: normal;}
+/* ----------------------------------------------------------------------------------------------------------
+                                          Landing page - General
+-------------------------------------------------------------------------------------------------------------*/
+#landing-left-section{background-color: #2B7A78;}
+#landing-right-section{background-color: #FEFFFF;text-align: center;}
+.landing{width: 100vw; height: 100vh; margin: 0px 0px;padding: 0;}
+.landingrow{width: 100vw; height: 100vh; margin: 0px;}
+.roundedinput{background: #FEFFFF;border-radius: 30px;border: none;}
+.roundedinputselect{background: url("arrow.png") no-repeat right #feffff;background: #FEFFFF;border-radius: 30px;border: none;}
+#loginpagelogo{width: 300px;}
+#namelogo{margin: auto;position: relative;top: 50%;-ms-transform:translateY(-55%);transform: translateY(-55%);text-align: center;}
+#title{color:#DEF2F1;font-size: 4vw;}
+/* ----------------------------------------------------------------------------------------------------------
+                                          Landing page - login
+-------------------------------------------------------------------------------------------------------------*/
+#login-button{width: 10vw;background: #2B7A78; border-radius: 30px; color: #DEF2F1;border: none;}
+#loginframe{width: 42vw; margin: auto;padding: 20px;padding-top: 30px; background: #DEF2F1;border-radius: 30px;color: #2B7A78;font-size: 1.6vw;}
+#loginform{margin: auto;width:40vw;text-align: left;}
+#login-question{color:#2B7A78;font-size: 1.6vw;}
+#signup-button-login{background: #DEF2F1;border-radius: 25px;color:#2B7A78;border: none;font-size: 1.6vw;}
+#loginVerticalAlign{position: relative;top: 50%;-ms-transform:translateY(-55%);transform: translateY(-55%);}
+/* ----------------------------------------------------------------------------------------------------------
+                                          Landing page - signup
+-------------------------------------------------------------------------------------------------------------*/
+#signup-button{width: 10vw;background: #2B7A78; border-radius: 30px; color: #DEF2F1;border: none;}
+#signupframe{width: 40vw; margin: auto;padding: 20px;padding-top: 30px; background: #DEF2F1;border-radius: 30px;color: #2B7A78;font-size: 1.4vw;text-align: left;}
+#signupform{margin: auto;width: 38vw; text-align: left;}
+#signupVerticalAlign{position: relative;top: 50%;-ms-transform:translateY(-50%);transform: translateY(-50%);}
+#signup-question{color:#2B7A78;font-size: 1.4vw;}
+#signup-button-login{width:10vw;background: #DEF2F1;border-radius: 25px;color:#2B7A78;border: none;font-size: 1.4vw;}
+#notesignup{background-color: #Feffff;border-radius: 25px;border: 5px solid #FEFFFF;}
+/* ----------------------------------------------------------------------------------------------------------
+                                          Dashboard - general
+-------------------------------------------------------------------------------------------------------------*/
+.customnav{background-color: #2B7A78;}
+.navbar { font-size:22px !important; padding-left: 10px;}
+.nav-item{padding-left: 30px;}
+.navbarNav{ color: #FEFFFF;}
+.dash{width: 100%;}
+.dashfunction{text-align: center;}
+.functionbtn{width: 10vw;background: #2B7A78; border-radius: 30px; color: #DEF2F1;border: none;font-size: 1.8vw;}
+.functionicon{width: 12vw;}
+#dashVerticalAlign{position: relative;top: 45%;-ms-transform:translateY(-50%);transform: translateY(-50%);}
+/* ----------------------------------------------------------------------------------------------------------
+                                          TI- admin page
+-------------------------------------------------------------------------------------------------------------*/
+#function-left-section{background-color: #DEF2F1;}
+#function-right-section{background-color: #FEFFFF;text-align: center;}
+#functionicon-admin{width: 10vw;}
+#functiontitle-admin{font-size: 3vw;color:#2B7A78; }
+.adminfunction{border-bottom: 3px solid #3AAFA9; padding: 10px 10px;}
+.adminfunctionoption{margin:auto;text-align: center;margin-top: 20px;}
+.admin-functionbtn{width: 15vw;background: #2B7A78; border-radius: 30px; color: #DEF2F1;border: none;font-size: 2vw;}
+.course-editbtn{padding: 50px 0;}
+/*code refferenced from ----https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/---*/
+.popup .overlay {
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100vw;
+  height:100vh;
+  background:rgba(0,0,0,0.7);
+  z-index:1;
+  display:none;
+}
+
+.popup .content {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%) scale(0);
+  background:#DEF2F1;
+  border: 4px solid #2B7A78;
+  border-radius: 30px;
+  width:48vw;
+  height:50vh;
+  max-height: 280px;
+  z-index:2;
+  text-align:center;
+  padding:20px;
+  box-sizing:border-box;
+  color: #2B7A78;
+  font-size: 1.5vw;
+}
+
+.popup .close-btn {
+  cursor:pointer;
+  position:absolute;
+  right:20px;
+  top:20px;
+  width:30px;
+  height:30px;
+  background:#2B7A78;
+  color:#FEFFFF;
+  font-size:25px;
+  font-weight:600;
+  line-height:30px;
+  text-align:center;
+  border-radius:50%;
+}
+
+.popup.active .overlay {
+  display:block;
+}
+
+.popup.active .content {
+  transition:all 300ms ease-in-out;
+  transform:translate(-50%,-50%) scale(1);
+}
+/*Reff-fin*/
+#addcourse-admin{text-align:left;width: 90%;margin: 20px auto;}
+#add-coursebtn{width: 10vw;background: #2B7A78; border-radius: 30px; color: #DEF2F1;border: none;}
+#addform-title{font-size: 1.9vw;font-weight: bold;}
+/* ----------------------------------------------------------------------------------------------------------
+                                          TI- Student page
+-------------------------------------------------------------------------------------------------------------*/
+#studentfilter{color:#2B7A78;font-size: 1.8vw;width: 90%;margin: auto;padding-top: 30px;}
+.st-colalign{padding: 0;padding-top: 30px;}
+.st-input{width: 100%}
+#st-searchbtn{width: 10vw;background: #2B7A78; border-radius: 30px; color: #DEF2F1;border: none;}
+.popup .stcontent {
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-60%,-60%) scale(0);
+  background:#DEF2F1;
+  border: 4px solid #2B7A78;
+  border-radius: 30px;
+  width:48vw;
+
+  max-height: 520px;
+  z-index:2;
+  text-align:center;
+  padding:20px;
+  box-sizing:border-box;
+  color: #2B7A78;
+  font-size: 1.5vw;
+}
+.popup.active .stcontent {
+  transition:all 300ms ease-in-out;
+  transform:translate(-50%,-50%) scale(1);
+}
+/* ----------------------------------------------------------------------------------------------------------
+                                          TI- Marks page
+-------------------------------------------------------------------------------------------------------------*/
+#marksec{border: 2px solid #2B7A78;}
