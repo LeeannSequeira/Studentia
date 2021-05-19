@@ -35,7 +35,7 @@ echo "<script>alert('Added Student Successfully');</script>";
 mysqli_close($connection);
 }
 
-else if($_POST["button"]=="Add") //--------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
+else if($_POST["button"]=="Update") //--------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
 {
 $roll = $_POST["sroll"];
 $fname=$_POST["sfname"];
@@ -103,6 +103,20 @@ if(isset($ay) &&($ay!=-1))
 echo "<script>alert('Updated Student Record Successfully');</script>";
 mysqli_close($connection);
 }
+
+else if($_POST["button"]=="Delete")//--------------------------------------------------------------------------------------------------------------------ADD BUTTON
+{
+$roll = $_POST["sroll"];
+
+$queryDeleteEnrollEntry= "Delete From Enroll where Roll_no='$roll';";
+$resultDeleteEnrollEntry = mysqli_query($connection,$queryDeleteEnrollEntry) or die ("Error in query: ".$queryDeleteEnrollEntry." ".mysqli_connect_error());
+
+$queryDeleteStudentEntry= "Delete From Student where Roll_no='$roll';";
+$resultDeleteStudentEntry = mysqli_query($connection,$queryDeleteStudentEntry) or die ("Error in query: ".$queryDeleteStudentEntry." ".mysqli_connect_error());
+
+echo "<script>alert('Deleted Student Successfully');</script>";
+mysqli_close($connection);
+}
 }
 ?>
 
@@ -152,34 +166,42 @@ return d.toISOString().slice(0,10) === dateString;
     if(r==null||r=="")
      {
       alert("Please enter Rollno");    //roll num
+      return false;
      }
     if(x==null||x=="")
      {
       alert("Please enter First name");    //FIrst name
+      return false;
      }
     if(y==null||y=="")
      {
       alert("Please enter Middle name");     //mid name
+      return false;
      }
      if(z==null||z=="")
       {
        alert("Please enter Last name");     //last name
+       return false;
       }
       if(datevalidation(date)==false)
       {
        alert("Please enter correct date format");     //date
+       return false;
       }
       if (document.addst.sdept.value == "-1")
       {
         alert("please choose the department");        //Department
+        return false;
       }
       if (document.addst.sprog.value == "-1")
       {
         alert("please choose the program");        //Program
+        return false;
       }
       if (document.addst.say.value == "-1")
       {
         alert("please choose the class");        //Program
+        return false;
       }
     return true;
     }
@@ -191,12 +213,14 @@ return d.toISOString().slice(0,10) === dateString;
       if(r==null||r=="")
        {
         alert("Please enter Rollno");    //roll num
+        return false;
        }
       if(date!=null&&date!="")
       {
         if(datevalidation(date)==false)
         {
          alert("Please enter correct date format");     //date
+         return false;
         }
       }
       return true;
@@ -208,6 +232,7 @@ return d.toISOString().slice(0,10) === dateString;
         if(r==null||r=="")
          {
           alert("Please enter Rollno");    //roll num
+          return false;
          }
          return true;
       }
@@ -277,7 +302,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="validateAddStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
@@ -302,15 +327,12 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
                   <span id="addform-title">UPDATE STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="updatest" action="" method="POST" onsubmit="return validateUpdateStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="updatest" method="POST" onsubmit="validateUpdateStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
                     <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
                     <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="text" name="sjdate"></div></div>
-                    <div class="row mb-3"><div class="col-6">Department</div>
-                      <div class="col-6"><select class="roundedinputselect" name="sdept"><option value="-1" selected>Choose Department</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
-                    </div>
                     <div class="row mb-3"><div class="col-6">Program</div>
                       <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
                     </div>
@@ -329,7 +351,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupdeletest()">×</div><!--popup content-->
                   <span id="addform-title">DELETE A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="deletest" action="" method="POST" onsubmit="return validateDeleteStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="deletest" method="POST" onsubmit="validateDeleteStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Delete" id="add-coursebtn"></center></div>
                   </form></div>
