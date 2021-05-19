@@ -4,7 +4,7 @@ include "Db_Connection.php"; // Using database connection file here
 //variables retrieved from form are copied into simpler variable names
 if(isset($_POST["button"]))
 {
-if($_POST["button"]=="Add")
+if($_POST["button"]=="Add")//--------------------------------------------------------------------------------------------------------------------ADD BUTTON
 {
 $roll = $_POST["sroll"];
 $fname=$_POST["sfname"];
@@ -27,14 +27,80 @@ if(isset($resultGetCourses))
 {
 while ($row= mysqli_fetch_array($resultGetCourses)) {
   $cid=$row[0];
-  $queryInsertEnroll = "INSERT INTO enroll(Course_id,Roll_no) VALUES ('$cid','$roll');";
+  $queryInsertEnroll = "INSERT INTO enroll(C_id,Roll_no) VALUES ($cid,'$roll');";
   $resultInsertEnroll = mysqli_query($connection,$queryInsertEnroll) or die ("Error in query: ".$queryInsertEnroll." ".mysqli_connect_error());
 }
 }
-else {
-  echo "FAIL";
-}
 echo "<script>alert('Added Student Successfully');</script>";
+mysqli_close($connection);
+}
+
+else if($_POST["button"]=="Add") //--------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
+{
+$roll = $_POST["sroll"];
+$fname=$_POST["sfname"];
+$mname = $_POST["smname"];
+$lname = $_POST["slname"];
+$doj = $_POST["sjdate"];
+$prog = $_POST["sprog"];
+$ay = $_POST["say"];
+
+
+
+if(isset($fname) && ($fname!=null) &&($fname!=""))
+{
+  $queryUpdateFname = "Update student set Fname='$fname' where Roll_no='$roll';";
+  $resultUpdateFname = mysqli_query($connection,$queryUpdateFname) or die ("Error in query: ".$queryUpdateFname." ".mysqli_connect_error());
+}
+
+if(isset($mname) && ($mname!=null) &&($mname!=""))
+{
+  $queryUpdateMname = "Update student set Mname='$mname' where Roll_no='$roll';";
+  $resultUpdateMname = mysqli_query($connection,$queryUpdateMname) or die ("Error in query: ".$queryUpdateMname." ".mysqli_connect_error());
+}
+
+if(isset($lname) && ($lname!=null) &&($lname!=""))
+{
+  $queryUpdateLname = "Update student set Lname='$lname' where Roll_no='$roll';";
+  $resultUpdateLname = mysqli_query($connection,$queryUpdateLname) or die ("Error in query: ".$queryUpdateLname." ".mysqli_connect_error());
+}
+
+if(isset($doj) && ($doj!=null) &&($doj!=""))
+{
+  $queryUpdateDoj = "Update student set Dateofjoin='$doj' where Roll_no='$roll';";
+  $resultUpdateDoj = mysqli_query($connection,$queryUpdateDoj) or die ("Error in query: ".$queryUpdateDoj." ".mysqli_connect_error());
+}
+
+if(isset($prog) &&($prog!=-1))
+{
+  $queryUpdateProg= "Update student set Program=$prog where Roll_no='$roll';";
+  $resultUpdateProg = mysqli_query($connection,$queryUpdateProg) or die ("Error in query: ".$queryUpdateProg." ".mysqli_connect_error());
+
+  $queryDeleteEnrollEntry= "Delete From Enroll where Roll_no='$roll';";
+  $resultDeleteEnrollEntry = mysqli_query($connection,$queryDeleteEnrollEntry) or die ("Error in query: ".$queryDeleteEnrollEntry." ".mysqli_connect_error());
+
+  $queryGetCourses = "Select Course_id from semester_courses where Prog_id=$prog;";
+  $resultGetCourses = mysqli_query($connection,$queryGetCourses) or die ("Error in query: ".$queryGetCourses." ".mysqli_connect_error());
+
+  //mettez dans enroll tableau
+  if(isset($resultGetCourses))
+  {
+  while ($row= mysqli_fetch_array($resultGetCourses)) {
+    $cid=$row[0];
+    $queryInsertEnroll = "INSERT INTO enroll(C_id,Roll_no) VALUES ($cid,'$roll');";
+    $resultInsertEnroll = mysqli_query($connection,$queryInsertEnroll) or die ("Error in query: ".$queryInsertEnroll." ".mysqli_connect_error());
+  }
+  }
+}
+
+if(isset($ay) &&($ay!=-1))
+{
+  $queryUpdateEducationYear = "Update student set Education_year='$ay' where Roll_no='$roll';";
+  $resultUpdateEducationYear= mysqli_query($connection,$queryUpdateEducationYear) or die ("Error in query: ".$queryUpdateEducationYear." ".mysqli_connect_error());
+}
+
+
+echo "<script>alert('Updated Student Record Successfully');</script>";
 mysqli_close($connection);
 }
 }
