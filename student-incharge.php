@@ -18,19 +18,22 @@ $ay = $_POST["say"];
 $queryInsertStudent = "INSERT INTO student(Roll_no,Fname,Mname,Lname,Dateofjoin,Education_year,Program) VALUES ('$roll','$fname','$mname','$lname','$doj','$ay',$prog);";
 $resultInsertStudent = mysqli_query($connection,$queryInsertStudent) or die ("Error in query: ".$queryInsertStudent." ".mysqli_connect_error());
 
-$queryGetCourses = "Select Course_id from semester_courses where Prog_id='$prog';";
+$queryGetCourses = "Select Course_id from semester_courses where Prog_id=$prog;";
 $resultGetCourses = mysqli_query($connection,$queryGetCourses) or die ("Error in query: ".$queryGetCourses." ".mysqli_connect_error());
 
 
 //mettez dans enroll tableau
-while ($row= mysqli_fetch_assoc($result)) {
-  $un=$row["T_id"];
+if(isset($resultGetCourses))
+{
+while ($row= mysqli_fetch_array($resultGetCourses)) {
+  $cid=$row[0];
+  $queryInsertEnroll = "INSERT INTO enroll(Course_id,Roll_no) VALUES ('$cid','$roll');";
+  $resultInsertEnroll = mysqli_query($connection,$queryInsertEnroll) or die ("Error in query: ".$queryInsertEnroll." ".mysqli_connect_error());
 }
-
-$queryInsertEnroll = "INSERT INTO enroll(Course_id,Roll_no) VALUES ('$cid','$roll');";
-$resultInsertEnroll = mysqli_query($connection,$queryInsertEnroll) or die ("Error in query: ".$queryInsertEnroll." ".mysqli_connect_error());
-
-
+}
+else {
+  echo "FAIL";
+}
 echo "<script>alert('Added Student Successfully');</script>";
 mysqli_close($connection);
 }
