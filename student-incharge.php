@@ -46,7 +46,8 @@ $prog = $_POST["sprog"];
 $ay = $_POST["say"];
 
 
-
+if(isset($roll) && ($roll!=null) &&($roll!=""))
+{
 if(isset($fname) && ($fname!=null) &&($fname!=""))
 {
   $queryUpdateFname = "Update student set Fname='$fname' where Roll_no='$roll';";
@@ -102,6 +103,10 @@ if(isset($ay) &&($ay!=-1))
 
 echo "<script>alert('Updated Student Record Successfully');</script>";
 mysqli_close($connection);
+}
+else {
+  echo "<script>alert('Oops! Click OK to refresh the page');</script>";
+}
 }
 
 else if($_POST["button"]=="Delete")//--------------------------------------------------------------------------------------------------------------------ADD BUTTON
@@ -302,7 +307,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="validateAddStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
@@ -327,7 +332,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
                   <span id="addform-title">UPDATE STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="updatest" method="POST" onsubmit="validateUpdateStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="updatest" method="POST" onsubmit="return validateUpdateStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
@@ -351,7 +356,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupdeletest()">×</div><!--popup content-->
                   <span id="addform-title">DELETE A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="deletest" method="POST" onsubmit="validateDeleteStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="deletest" method="POST" onsubmit="return validateDeleteStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Delete" id="add-coursebtn"></center></div>
                   </form></div>
