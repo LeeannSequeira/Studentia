@@ -1,126 +1,114 @@
-
 <?php
-include "Db_Connection.php"; // Using database connection file here
-//variables retrieved from form are copied into simpler variable names
+include "Db_Connection.php"; // db connection
 if(isset($_POST["button"]))
 {
-if($_POST["button"]=="Add")//--------------------------------------------------------------------------------------------------------------------ADD BUTTON
+if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
 {
-$roll = $_POST["sroll"];
-$fname=$_POST["sfname"];
-$mname = $_POST["smname"];
-$lname = $_POST["slname"];
-$doj = $_POST["sjdate"];
-$prog = $_POST["sprog"];
-$ay = $_POST["say"];
+  include "Db_Connection.php"; // db connection
 
-//insert into student table
-$queryInsertStudent = "INSERT INTO student(Roll_no,Fname,Mname,Lname,Dateofjoin,Education_year,Program) VALUES ('$roll','$fname','$mname','$lname','$doj','$ay',$prog);";
-$resultInsertStudent = mysqli_query($connection,$queryInsertStudent) or die ("Error in query: ".$queryInsertStudent." ".mysqli_connect_error());
+  $roll = $_POST["sroll"];//get values from form and place them in variables
+  $fname=$_POST["sfname"];
+  $mname = $_POST["smname"];
+  $lname = $_POST["slname"];
+  $doj = $_POST["sjdate"];
+  $prog = $_POST["sprog"];
+  $ay = $_POST["say"];
 
-$queryGetCourses = "Select Course_id from semester_courses where Prog_id=$prog;";
-$resultGetCourses = mysqli_query($connection,$queryGetCourses) or die ("Error in query: ".$queryGetCourses." ".mysqli_connect_error());
+  //mettez dans Student tableau
+  $query = "INSERT INTO student(Roll_no,Fname,Mname,Lname,Dateofjoin,Education_year,program) VALUES ('$roll','$fname','$mname','$lname','$doj','$ay',$prog);";
+  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
+  //enroll student in every course belonging to the selected program
+  //cours choisis par le college- avant
 
-//mettez dans enroll tableau
-if(isset($resultGetCourses))
-{
-while ($row= mysqli_fetch_array($resultGetCourses)) {
-  $cid=$row[0];
-  $queryInsertEnroll = "INSERT INTO enroll(C_id,Roll_no) VALUES ($cid,'$roll');";
-  $resultInsertEnroll = mysqli_query($connection,$queryInsertEnroll) or die ("Error in query: ".$queryInsertEnroll." ".mysqli_connect_error());
-}
-}
-echo "<script>alert('Added Student Successfully');</script>";
-mysqli_close($connection);
-}
+  $query2="Select Course_id from semester_courses where Prog_id=$prog;";
+  $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
 
-else if($_POST["button"]=="Update") //--------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
-{
-$roll = $_POST["sroll"];
-$fname=$_POST["sfname"];
-$mname = $_POST["smname"];
-$lname = $_POST["slname"];
-$doj = $_POST["sjdate"];
-$prog = $_POST["sprog"];
-$ay = $_POST["say"];
-
-
-if(isset($roll) && ($roll!=null) &&($roll!=""))
-{
-if(isset($fname) && ($fname!=null) &&($fname!=""))
-{
-  $queryUpdateFname = "Update student set Fname='$fname' where Roll_no='$roll';";
-  $resultUpdateFname = mysqli_query($connection,$queryUpdateFname) or die ("Error in query: ".$queryUpdateFname." ".mysqli_connect_error());
-}
-
-if(isset($mname) && ($mname!=null) &&($mname!=""))
-{
-  $queryUpdateMname = "Update student set Mname='$mname' where Roll_no='$roll';";
-  $resultUpdateMname = mysqli_query($connection,$queryUpdateMname) or die ("Error in query: ".$queryUpdateMname." ".mysqli_connect_error());
-}
-
-if(isset($lname) && ($lname!=null) &&($lname!=""))
-{
-  $queryUpdateLname = "Update student set Lname='$lname' where Roll_no='$roll';";
-  $resultUpdateLname = mysqli_query($connection,$queryUpdateLname) or die ("Error in query: ".$queryUpdateLname." ".mysqli_connect_error());
-}
-
-if(isset($doj) && ($doj!=null) &&($doj!=""))
-{
-  $queryUpdateDoj = "Update student set Dateofjoin='$doj' where Roll_no='$roll';";
-  $resultUpdateDoj = mysqli_query($connection,$queryUpdateDoj) or die ("Error in query: ".$queryUpdateDoj." ".mysqli_connect_error());
-}
-
-if(isset($prog) &&($prog!=-1))
-{
-  $queryUpdateProg= "Update student set Program=$prog where Roll_no='$roll';";
-  $resultUpdateProg = mysqli_query($connection,$queryUpdateProg) or die ("Error in query: ".$queryUpdateProg." ".mysqli_connect_error());
-
-  $queryDeleteEnrollEntry= "Delete From Enroll where Roll_no='$roll';";
-  $resultDeleteEnrollEntry = mysqli_query($connection,$queryDeleteEnrollEntry) or die ("Error in query: ".$queryDeleteEnrollEntry." ".mysqli_connect_error());
-
-  $queryGetCourses = "Select Course_id from semester_courses where Prog_id=$prog;";
-  $resultGetCourses = mysqli_query($connection,$queryGetCourses) or die ("Error in query: ".$queryGetCourses." ".mysqli_connect_error());
-
-  //mettez dans enroll tableau
-  if(isset($resultGetCourses))
+  if($result2)
   {
-  while ($row= mysqli_fetch_array($resultGetCourses)) {
+  while ($row= mysqli_fetch_row($result2))  //mettez dans sem_cours tableau
+  {
     $cid=$row[0];
-    $queryInsertEnroll = "INSERT INTO enroll(C_id,Roll_no) VALUES ($cid,'$roll');";
-    $resultInsertEnroll = mysqli_query($connection,$queryInsertEnroll) or die ("Error in query: ".$queryInsertEnroll." ".mysqli_connect_error());
+    $query3="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
+    $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
   }
   }
+  echo "<script>alert('Student added Successfully');</script>";
+  mysqli_close($connection);
 }
-
-if(isset($ay) &&($ay!=-1))
+else if($_REQUEST['button']=="Update") //----------------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
 {
-  $queryUpdateEducationYear = "Update student set Education_year='$ay' where Roll_no='$roll';";
-  $resultUpdateEducationYear= mysqli_query($connection,$queryUpdateEducationYear) or die ("Error in query: ".$queryUpdateEducationYear." ".mysqli_connect_error());
-}
+  $roll = $_POST["sroll"];//get values from form and place them in variables
+  $fname=$_POST["sfname"];
+  $mname = $_POST["smname"];
+  $lname = $_POST["slname"];
+  $doj = $_POST["sjdate"];
+  $prog = $_POST["sprog"];
+  $ay = $_POST["say"];
 
+  //verife tous noms pour vider
+  if(isset($fname)&& ($fname!=null) && ($fname!=""))
+  {
+    $query1 = "update student set Fname='$fname' where Roll_no='$roll';";
+    $result1 = mysqli_query($connection,$query1) or die ("Error in query: ".$query1." ".mysqli_connect_error());
+  }
+  if(isset($mname)&& ($mname!=null) && ($mname!=""))
+  {
+    $query2 = "update student set Mname='$mname' where Roll_no='$roll';";
+    $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+  }
+  if(isset($lname)&& ($lname!=null) && ($lname!=""))
+  {
+    $query3 = "update student set Lname='$lname' where Roll_no='$roll';";
+    $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
+  }
+  if(isset($doj)&& ($doj!=null) && ($doj!=""))
+  {
+    $query4 = "update student set Dateofjoin='$doj' where Roll_no='$roll';";
+    $result4 = mysqli_query($connection,$query4) or die ("Error in query: ".$query4." ".mysqli_connect_error());
+  }
+  if(isset($prog)&& ($prog!=null) && ($prog!=""))
+  {
+    $query5 = "update student set Program='$prog' where Roll_no='$roll';";
+    $result5 = mysqli_query($connection,$query5) or die ("Error in query: ".$query5." ".mysqli_connect_error());
 
-echo "<script>alert('Updated Student Record Successfully');</script>";
-mysqli_close($connection);
-}
-else {
-  echo "<script>alert('Oops! Click OK to refresh the page');</script>";
-}
-}
+    $query7="delete from enroll where roll_no='$roll';";
+    $result7 = mysqli_query($connection,$query7) or die ("Error in query: ".$query7." ".mysqli_connect_error());
 
-else if($_POST["button"]=="Delete")//--------------------------------------------------------------------------------------------------------------------ADD BUTTON
+    $query7="Select Course_id from semester_courses where Prog_id=$prog;";
+    $result7 = mysqli_query($connection,$query7) or die ("Error in query: ".$query7." ".mysqli_connect_error());
+    if($result7)
+    {
+    while ($row= mysqli_fetch_row($result7))  //mettez dans sem_cours tableau
+    {
+      $cid=$row[0];
+      $query8="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
+      $result8 = mysqli_query($connection,$query8) or die ("Error in query: ".$query8." ".mysqli_connect_error());
+    }
+    }
+  }
+  if(isset($ay))
+  {
+    $query6 = "update student set Education_year='$ay' where Roll_no='$roll';";
+    $result6 = mysqli_query($connection,$query6) or die ("Error in query: ".$query6." ".mysqli_connect_error());
+  }
+  echo "<script>alert('Student Record Updated Successfully');</script>";
+  mysqli_close($connection);
+}
+else if($_REQUEST['button']=="Delete") //------------------------------------------------------------------------------------------------------------------------------DELETE BUTTON
 {
-$roll = $_POST["sroll"];
+  $roll = $_POST["sroll"];//get values from form and place them in variables
 
-$queryDeleteEnrollEntry= "Delete From Enroll where Roll_no='$roll';";
-$resultDeleteEnrollEntry = mysqli_query($connection,$queryDeleteEnrollEntry) or die ("Error in query: ".$queryDeleteEnrollEntry." ".mysqli_connect_error());
+  //efface dans sem_cours tableau (voir le autre tableux)
+  $query = "delete from enroll where roll_no='$roll';";
+  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
-$queryDeleteStudentEntry= "Delete From Student where Roll_no='$roll';";
-$resultDeleteStudentEntry = mysqli_query($connection,$queryDeleteStudentEntry) or die ("Error in query: ".$queryDeleteStudentEntry." ".mysqli_connect_error());
+  //efface dans Student tableau
+  $query = "delete from student where Roll_no='$roll';";
+  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
-echo "<script>alert('Deleted Student Successfully');</script>";
-mysqli_close($connection);
+  echo "<script>alert('Student Record Deleted Successfully');</script>";
+  mysqli_close($connection);
 }
 }
 ?>
@@ -171,42 +159,30 @@ return d.toISOString().slice(0,10) === dateString;
     if(r==null||r=="")
      {
       alert("Please enter Rollno");    //roll num
-      return false;
      }
     if(x==null||x=="")
      {
       alert("Please enter First name");    //FIrst name
-      return false;
      }
     if(y==null||y=="")
      {
       alert("Please enter Middle name");     //mid name
-      return false;
      }
      if(z==null||z=="")
       {
        alert("Please enter Last name");     //last name
-       return false;
       }
       if(datevalidation(date)==false)
       {
        alert("Please enter correct date format");     //date
-       return false;
-      }
-      if (document.addst.sdept.value == "-1")
-      {
-        alert("please choose the department");        //Department
-        return false;
       }
       if (document.addst.sprog.value == "-1")
       {
         alert("please choose the program");        //Program
-        return false;
       }
       if (document.addst.say.value == "-1")
       {
         alert("please choose the class");        //Program
-        return false;
       }
     return true;
     }
@@ -218,14 +194,12 @@ return d.toISOString().slice(0,10) === dateString;
       if(r==null||r=="")
        {
         alert("Please enter Rollno");    //roll num
-        return false;
        }
       if(date!=null&&date!="")
       {
         if(datevalidation(date)==false)
         {
          alert("Please enter correct date format");     //date
-         return false;
         }
       }
       return true;
@@ -237,7 +211,6 @@ return d.toISOString().slice(0,10) === dateString;
         if(r==null||r=="")
          {
           alert("Please enter Rollno");    //roll num
-          return false;
          }
          return true;
       }
@@ -282,18 +255,18 @@ return d.toISOString().slice(0,10) === dateString;
           <div class="row">
             <div class="adminfunction"><img id="functionicon-admin" src="images/studenticon.png">&nbsp<span id="functiontitle-admin"> Student</span></div>
           </div>
-          <form id="studentfilter" name="sfilter" action="" method="POST">
+          <form id="studentfilter" name="sfilter" action="student-incharge.php" method="POST">
          <div class="row">
-              <div class="col-6 st-colalign">Department</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sdept"><option value="-1" selected>Department</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
+              <div class="col-6 st-colalign">Program</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="stprog"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
          </div>
          <div class="row">
-             <div class="col-6 st-colalign"> Class</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sclass"><option value="-1" selected>Class</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
+             <div class="col-6 st-colalign"> Class</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="stclass"><option value="-1" selected>Class</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
          </div>
          <div class="row">
-             <div class="col-6 st-colalign"> Rollno</div><div class="col-6 st-colalign"><input class="roundedinput st-input" type="text" name="sroll"></div>
+             <div class="col-6 st-colalign"> Rollno</div><div class="col-6 st-colalign"><input class="roundedinput st-input" type="text" name="stroll"></div>
          </div>
          <div class="row">
-             <div class="col-12 st-colalign"><center><input type="submit" value="Search" id="st-searchbtn"></center></div>
+             <div class="col-12 st-colalign"><center><input type="submit" name="button" value="Search" id="st-searchbtn"></center></div>
          </div>
         </form>
         </div>
@@ -307,7 +280,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="addst" action="student-incharge.php" method="POST" onSubmit="return validateAddStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
@@ -332,7 +305,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
                   <span id="addform-title">UPDATE STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="updatest" method="POST" onsubmit="return validateUpdateStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="updatest" action="student-incharge.php" method="POST" onsubmit="return validateUpdateStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
@@ -356,7 +329,7 @@ return d.toISOString().slice(0,10) === dateString;
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupdeletest()">×</div><!--popup content-->
                   <span id="addform-title">DELETE A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="deletest" method="POST" onsubmit="return validateDeleteStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="deletest" action="student-incharge.php" method="POST" onsubmit="return validateDeleteStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Delete" id="add-coursebtn"></center></div>
                   </form></div>
@@ -364,6 +337,90 @@ return d.toISOString().slice(0,10) === dateString;
               </div>
             </div>
           </div>
+            <div class="searchresults">
+            <?php
+            if(isset($_POST['button']))
+            {
+              if($_REQUEST['button']=="Search") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+              {
+                $prog = $_POST["stprog"];
+                $class = $_POST["stclass"];
+                $roll = $_POST["stroll"];
+
+
+                if(isset($prog)&& ($prog!='-1'))
+                {
+                  If(isset($class)&& ($class!='-1'))
+                  {
+                    if(isset($roll)&& ($roll!=null) && ($roll!=""))
+                    {
+                      $query1 = "Select * from student where Program=$prog and Education_year='$class' and Roll_no='$roll';";
+                    }
+                    else
+                    {
+                      $query1 = "Select * from student where Program=$prog and Education_year='$class';";
+                    }
+                  }
+                  else
+                  {
+                    if(isset($roll)&& ($roll!=null) && ($roll!=""))
+                    {
+                      $query1 = "Select * from student where Program=$prog and Roll_no='$roll';";
+                    }
+                    else
+                    {
+                      $query1 = "Select * from student where Program=$prog;";
+                    }
+                  }
+                }
+                else
+                {
+                  If(isset($class)&& ($class!='-1'))
+                  {
+                    if(isset($roll)&& ($roll!=null) && ($roll!=""))
+                    {
+                      $query1 = "Select * from student where Education_year='$class' and Roll_no='$roll';";
+                    }
+                    else
+                    {
+                      $query1 = "Select * from student where Education_year='$class';";
+                    }
+                  }
+                  else
+                  {
+                    if(isset($roll)&& ($roll!=null) && ($roll!=""))
+                    {
+                      $query1 = "Select * from student where Roll_no='$roll';";
+                    }
+                    else
+                    {
+                      $query1 = "Select * from student;";
+                    }
+                  }
+                }
+
+                $result1 = mysqli_query($connection,$query1) or die ("Error in query: ".$query1." ".mysqli_connect_error()); //Works and obtains result
+
+                if(mysqli_num_rows($result1)>0)
+                {
+                  echo "<table class='table table-striped' id='studdata'>";
+                  echo "<tr><th>Roll no.</th><th>Name</th><th>Registration date</th><th>Class</th><th>Program</th></tr>";
+                while ($row= mysqli_fetch_row($result1))
+                {
+                  echo "<tr>";
+                  echo "<td>".$row[0]."</td>";
+                  echo "<td>".$row[1]." ".$row[2]." ".$row[3]."</td>";
+                  echo "<td>".$row[4]."</td>";
+                  echo "<td>".$row[5]."</td>";
+                  echo "<td>".$row[9]."</td>";
+                  echo "</tr>";
+                }
+                  echo "</table>";
+                }
+                mysqli_close($connection);
+              }}
+              ?>
+            </div>
         </div>
       </div>
     </div>
