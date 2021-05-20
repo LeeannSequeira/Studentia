@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 19, 2021 at 06:18 PM
+-- Generation Time: May 20, 2021 at 08:14 AM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -170,6 +170,45 @@ CREATE TABLE `enroll` (
   `Course_grade` varchar(5) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `enroll`
+--
+
+INSERT INTO `enroll` (`C_id`, `Roll_no`, `attendance`, `Course_grade`) VALUES
+(1, '1', 0, ''),
+(1, '2', 0, ''),
+(1, '3', 0, ''),
+(2, '1', 0, ''),
+(2, '2', 0, ''),
+(2, '3', 0, ''),
+(3, '1', 0, ''),
+(3, '2', 0, ''),
+(3, '3', 0, ''),
+(4, '1', 0, ''),
+(4, '2', 0, ''),
+(4, '3', 0, ''),
+(5, '1', 0, ''),
+(5, '2', 0, ''),
+(5, '3', 0, ''),
+(6, '1', 0, ''),
+(6, '2', 0, ''),
+(6, '3', 0, ''),
+(7, '1', 0, ''),
+(7, '2', 0, ''),
+(7, '3', 0, ''),
+(10, '1', 0, ''),
+(10, '2', 0, ''),
+(10, '3', 0, ''),
+(12, '1', 0, ''),
+(12, '2', 0, ''),
+(12, '3', 0, ''),
+(13, '1', 0, ''),
+(13, '2', 0, ''),
+(13, '3', 0, ''),
+(14, '1', 0, ''),
+(14, '2', 0, ''),
+(14, '3', 0, '');
+
 -- --------------------------------------------------------
 
 --
@@ -178,17 +217,18 @@ CREATE TABLE `enroll` (
 
 CREATE TABLE `program` (
   `P_id` int(11) NOT NULL,
-  `P_name` varchar(20) NOT NULL
+  `P_name` varchar(20) NOT NULL,
+  `Department` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `program`
 --
 
-INSERT INTO `program` (`P_id`, `P_name`) VALUES
-(1, 'BCA'),
-(2, 'BBA'),
-(3, 'BAMC');
+INSERT INTO `program` (`P_id`, `P_name`, `Department`) VALUES
+(1, 'BCA', 1),
+(2, 'BBA', 2),
+(3, 'BAMC', 3);
 
 -- --------------------------------------------------------
 
@@ -283,6 +323,15 @@ CREATE TABLE `student` (
   `Program` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `student`
+--
+
+INSERT INTO `student` (`Roll_no`, `Fname`, `Mname`, `Lname`, `Dateofjoin`, `Education_year`, `CPI`, `Grade`, `Gradepoint`, `Program`) VALUES
+('1', 'pink', 'light', 'candy', '2021-05-18', '1', 0.00000, '', 0.000, 1),
+('2', 'blue', 'dark', 'sea', '2021-05-17', '1', 0.00000, '', 0.000, 1),
+('3', 'green', 'light', 'grass', '2021-05-10', '1', 0.00000, '', 0.000, 1);
+
 -- --------------------------------------------------------
 
 --
@@ -338,6 +387,18 @@ CREATE TABLE `test` (
   `Course` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `test`
+--
+
+INSERT INTO `test` (`Test_id`, `T_name`, `Date_conducted`, `Max_marks`, `Test_category`, `Course`) VALUES
+(1, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
+(2, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
+(3, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
+(4, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
+(5, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
+(6, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13);
+
 -- --------------------------------------------------------
 
 --
@@ -350,6 +411,15 @@ CREATE TABLE `test_conducted` (
   `Obtained_marks` int(11) NOT NULL,
   `Attempt_no` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `test_conducted`
+--
+
+INSERT INTO `test_conducted` (`Test_id`, `Roll_no`, `Obtained_marks`, `Attempt_no`) VALUES
+(1, '1', 0, 0),
+(1, '2', 0, 0),
+(1, '3', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -421,7 +491,8 @@ ALTER TABLE `enroll`
 -- Indexes for table `program`
 --
 ALTER TABLE `program`
-  ADD PRIMARY KEY (`P_id`);
+  ADD PRIMARY KEY (`P_id`),
+  ADD KEY `DepartmentProgramLink` (`Department`);
 
 --
 -- Indexes for table `program_semesters`
@@ -512,7 +583,7 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `test`
 --
 ALTER TABLE `test`
-  MODIFY `Test_id` int(10) NOT NULL AUTO_INCREMENT;
+  MODIFY `Test_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
@@ -566,6 +637,12 @@ ALTER TABLE `department_teachers`
 ALTER TABLE `enroll`
   ADD CONSTRAINT `courseEnrollLink` FOREIGN KEY (`C_id`) REFERENCES `course` (`C_id`),
   ADD CONSTRAINT `studentEnrollLink` FOREIGN KEY (`Roll_no`) REFERENCES `student` (`Roll_no`);
+
+--
+-- Constraints for table `program`
+--
+ALTER TABLE `program`
+  ADD CONSTRAINT `DepartmentProgramLink` FOREIGN KEY (`Department`) REFERENCES `department` (`Dept_id`);
 
 --
 -- Constraints for table `program_semesters`

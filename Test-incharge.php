@@ -14,23 +14,23 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   $prog = $_POST["tprog"];
 
   //mettez dans test tableau
-  $query = "INSERT INTO test(T_name,Date_conducted,Max_marks,Test_Category,Course) VALUES ('$name','$date',$max,'$tcat',$cours);";
+  $query = "INSERT INTO test(T_name,Date_conducted,Max_marks,Test_Category,Course) VALUES ('$name','$date',$max,'$cat',$cours);";
   $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
   //mettez dans test_conducted tableau parceque le etudient repondront un jour
 
-  $query4="Select Test_id from Test where program='$prog' and Date_conducted='$date' and T_name='$name';";
+  $query4="Select Test_id from test where Course=$cours and Date_conducted='$date' and T_name='$name';";
   $result4 = mysqli_query($connection,$query4) or die ("Error in query: ".$query4." ".mysqli_connect_error());
-  $id= mysqli_fetch_row($result4)
+  $id= mysqli_fetch_row($result4);
 
-  $query2="Select Roll_no from student where program='$prog';";
+  $query2="Select Roll_no from student where Program=$prog;";
   $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
 
   if($result2)
   {
   while ($row= mysqli_fetch_row($result2))  //mettez dans sem_cours tableau
   {
-    $query3="insert into test_conducted(Test_id,Roll_no)values($id,'$row[0]');";
+    $query3="insert into test_conducted(Test_id,Roll_no)values($id[0],'$row[0]');";
     $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
   }
   }
@@ -39,79 +39,53 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
 }
 else if($_REQUEST['button']=="Update") //----------------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
 {
+  $tid=$_POST["tid"];
   $name=$_POST["tname"];
   $cat = $_POST["tcat"];
   $date = $_POST["tdate"];
   $max = $_POST["tmax"];
   $cours = $_POST["tcours"];
-  $prog = $_POST["tprog"];
 
   //verife tous noms pour vider noms
   if(isset($name)&& ($name!=null) && ($name!=""))
   {
-    $query1 = "update student set Fname='$fname' where Roll_no='$roll';";
+    $query1 = "Update test set T_name='$name' where Test_id=$tid;";
     $result1 = mysqli_query($connection,$query1) or die ("Error in query: ".$query1." ".mysqli_connect_error());
   }
-  if(isset($cat)&& ($cat!='-1')))
+  if(isset($cat)&& ($cat!='-1'))
   {
-    $query2 = "update student set Mname='$mname' where Roll_no='$roll';";
+    $query2 ="Update test set Test_Category='$cat' where Test_id=$tid;";
     $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
   }
   if(isset($date)&& ($date!=null) && ($date!=""))
   {
-    $query3 = "update student set Lname='$lname' where Roll_no='$roll';";
+    $query3 = "Update test set Date_conducted='$date' where Test_id=$tid;";
     $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
   }
   if(isset($max)&& ($max!=null) && ($max!=""))
   {
-    $query4 = "update student set Dateofjoin='$doj' where Roll_no='$roll';";
+    $query4 = "Update test set Max_marks='$max' where Test_id=$tid;";
     $result4 = mysqli_query($connection,$query4) or die ("Error in query: ".$query4." ".mysqli_connect_error());
   }
 
-///////////////////////CHAnge all the body of above if statements and add course verification below////////////////////////////////////
-
-
-
-
-  if(isset($prog)&& ($prog!=null) && ($prog!=""))
+  if(isset($cours)&& ($cours!='-1'))
   {
-    $query5 = "update student set Program='$prog' where Roll_no='$roll';";
+    $query5 = "Update test set Course=$cours where Test_id=$tid;";
     $result5 = mysqli_query($connection,$query5) or die ("Error in query: ".$query5." ".mysqli_connect_error());
-
-    $query7="delete from enroll where roll_no='$roll';";
-    $result7 = mysqli_query($connection,$query7) or die ("Error in query: ".$query7." ".mysqli_connect_error());
-
-    $query7="Select Course_id from semester_courses where Prog_id=$prog;";
-    $result7 = mysqli_query($connection,$query7) or die ("Error in query: ".$query7." ".mysqli_connect_error());
-    if($result7)
-    {
-    while ($row= mysqli_fetch_row($result7))  //mettez dans sem_cours tableau
-    {
-      $cid=$row[0];
-      $query8="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
-      $result8 = mysqli_query($connection,$query8) or die ("Error in query: ".$query8." ".mysqli_connect_error());
-    }
-    }
   }
-  if(isset($ay))
-  {
-    $query6 = "update student set Education_year='$ay' where Roll_no='$roll';";
-    $result6 = mysqli_query($connection,$query6) or die ("Error in query: ".$query6." ".mysqli_connect_error());
-  }
-  echo "<script>alert('Student Record Updated Successfully');</script>";
+  echo "<script>alert('Test Record Updated Successfully');</script>";
   mysqli_close($connection);
 }
 else if($_REQUEST['button']=="Delete") //------------------------------------------------------------------------------------------------------------------------------DELETE BUTTON
 {
-  $roll = $_POST["sroll"];//get values from form and place them in variables
+  $tid=$_POST["tid"];
 
-  //efface dans sem_cours tableau (voir le autre tableux)
-  $query = "delete from enroll where roll_no='$roll';";
+  $query6 = "delete from test_conducted where Test_id=$tid;";
+  $result6 = mysqli_query($connection,$query6) or die ("Error in query: ".$query6." ".mysqli_connect_error());
+
+  $query = "delete from test where Test_id=$tid;";
   $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
-  //efface dans Student tableau
-  $query = "delete from student where Roll_no='$roll';";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
   echo "<script>alert('Student Record Deleted Successfully');</script>";
   mysqli_close($connection);
@@ -161,22 +135,37 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
     var	z=document.addst.tcat.value;
     var	r=document.addst.tmax.value;
     var	date=document.addst.tdate.value;
+    var	c=document.addst.tcours.value;
     if(x==null||x=="")
      {
       alert("Please enter Test name");
+        return false;
+
      }
      if(datevalidation(date)==false)
        {
         alert("Please enter correct date format");
+          return false;
+
        }
     if(r==null||r=="")
      {
       alert("Please enter Max marks");
+        return false;
+
      }
 
      if (z == "-1")
      {
        alert("please choose Test Category");
+         return false;
+
+     }
+     if (c == "-1")
+     {
+       alert("please choose Test Course");
+         return false;
+
      }
     return true;
     }
@@ -186,7 +175,9 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
       var	r=document.updatest.tid.value;
       if(r==null||r=="")
        {
-        alert("Please enter teacher id");
+        alert("Please enter Test id");
+          return false;
+
        }
       var	date=document.updatest.tdate.value;
       if(date!=null&&date!="")
@@ -194,27 +185,30 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
         if(datevalidation(date)==false)
         {
          alert("Please enter correct date format");
+           return false;
+
         }
       }
       return true;
       }
 
-      function validateDeleteStudent()//Validates Test id
+      function validateDeleteTest()//Validates Test id
       {
         var	r=document.deletest.tid.value;
         if(r==null||r=="")
          {
-          alert("Please enter teacher id");
+          alert("Please enter Test id");
+            return false;
+         }
          return true;
       }
-    }
 
     $(document).ready(function(){           //Filter dynamic course list
         $('#tpro').on('change', function(){
             var pid = $(this).val();
             if(pid){
                 $.ajax({
-                    url:"ajaxData.php",
+                    url:"testFilter.php",
                     method:"POST",
                     data: {pid:pid},
                     success:function(html){
@@ -227,6 +221,41 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
         });
     });
 
+    $(document).ready(function(){           //Add test- dynamic course list
+        $('#addpro').on('change', function(){
+            var pid = $(this).val();
+            if(pid){
+                $.ajax({
+                    url:"testFilter.php",
+                    method:"POST",
+                    data: {pid:pid},
+                    success:function(html){
+                        $('#addtco').html(html);
+                    }
+                });
+            }else{
+                $('#addtco').html('<option value="">Select Program first</option>');
+            }
+        });
+    });
+
+    $(document).ready(function(){           //Update test- dynamic course list
+        $('#uppro').on('change', function(){
+            var pid = $(this).val();
+            if(pid){
+                $.ajax({
+                    url:"testFilter.php",
+                    method:"POST",
+                    data: {pid:pid},
+                    success:function(html){
+                        $('#uptco').html(html);
+                    }
+                });
+            }else{
+                $('#uptco').html('<option value="">Select Program first</option>');
+            }
+        });
+    });
  </script>
 
 </head>
@@ -240,7 +269,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard-incharge.html">Home</a>
+            <a class="nav-link" href="dashboard-incharge.php">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="student-incharge.php">Student</a>
@@ -249,13 +278,13 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
             <a class="nav-link" href="test-incharge.php">Test</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="marks-incharge.html">Marks</a>
+            <a class="nav-link" href="marks-incharge.php">Marks</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="result-incharge.html">Result</a>
+            <a class="nav-link" href="result-incharge.php">Result</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="hallticket-incharge.html">Hall Ticket</a>
+            <a class="nav-link" href="hallticket-incharge.php">Hall Ticket</a>
           </li>
         </ul>
       </div>
@@ -281,7 +310,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
              </select></div>
          </div>
          <div class="row">
-             <div class="col-12 st-colalign"><center><input type="submit" value="Search" id="st-searchbtn"></center></div>
+             <div class="col-12 st-colalign"><center><input type="submit" name="button" value="Search" id="st-searchbtn"></center></div>
          </div>
         </form>
         </div>
@@ -297,16 +326,18 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                   <span id="addform-title">ADD A TEST</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddTest()">
                     <div class="row mb-3"><div class="col-6">Test Name</div><div class="col-6"><input class="roundedinput" type="text" name="tname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="text" name="tdate"></div></div>
+                    <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="tdate"></div></div>
                     <div class="row mb-3"><div class="col-6">Maximum marks</div><div class="col-6"><input class="roundedinput" type="text" name="tmax"></div></div>
                     <div class="row mb-3"><div class="col-6">Test category</div>
-                      <div class="col-6"><select class="roundedinputselect" name="tcat"><option value="-1" selected>category</option><option value="1">ISA</option><option value="2">ESE</option><option value="3">OBT</option><option value="4">Quiz</option><option value="5">Assignment</option><option value="6">Presentation</option></select></div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6 st-colalign"> Program</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="tprog" onchange="run()"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
+                      <div class="col-6"><select class="roundedinputselect" name="tcat"><option value="-1" selected>category</option><option value="ISA">ISA</option><option value="ESE">ESE</option><option value="OBT">OBT</option><option value="Quiz">Quiz</option><option value="Assignment">Assignment</option><option value="Presentation">Presentation</option></select></div>
                     </div>
                     <div class="row mb-3">
-                        <div class="col-6">Course</div><div class="col-6 "><input class="roundedinput st-input" type="text" name="tcourse"></div>
+                        <div class="col-6 "> Program</div><div class="col-6"><select class="roundedinputselect st-input" name="tprog" id="addpro"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-6 ">Course</div><div class="col-6"><select class="roundedinputselect st-input" name="tcours" id="addtco">
+                        <option value="-1" selected>Course</option>
+                      </select></div>
                     </div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Add" id="add-coursebtn"></center></div>
                   </form></div>
@@ -321,13 +352,21 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
                   <span id="addform-title">UPDATE TEST</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddTest()">
+                  <div id="st-addform"><form id="addcourse-admin" name="updatest"  method="POST" onSubmit="return validateUpdateTest()">
                       <div class="row mb-3"><div class="col-6">Test ID</div><div class="col-6"><input class="roundedinput" type="text" name="tid"></div></div>
                     <div class="row mb-3"><div class="col-6">Test Name</div><div class="col-6"><input class="roundedinput" type="text" name="tname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="text" name="tdate"></div></div>
+                    <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="tdate"></div></div>
                     <div class="row mb-3"><div class="col-6">Maximum marks</div><div class="col-6"><input class="roundedinput" type="text" name="tmax"></div></div>
                     <div class="row mb-3"><div class="col-6">Test category</div>
-                      <div class="col-6"><select class="roundedinputselect" name="tcat"><option value="-1" selected>category</option><option value="1">ISA</option><option value="2">ESE</option><option value="3">OBT</option><option value="4">Quiz</option><option value="5">Assignment</option><option value="6">Presentation</option></select></div>
+                      <div class="col-6"><select class="roundedinputselect" name="tcat"><option value="-1" selected>category</option><option value="ISA">ISA</option><option value="ESE">ESE</option><option value="OBT">OBT</option><option value="Quiz">Quiz</option><option value="Assignment">Assignment</option><option value="Presentation">Presentation</option></select></div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-6"> Program</div><div class="col-6"><select class="roundedinputselect st-input" name="tprog" id="uppro"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
+                    </div>
+                    <div class="row mb-3">
+                      <div class="col-6">Course</div><div class="col-6"><select class="roundedinputselect st-input" name="tcours" id="uptco">
+                        <option value="-1" selected>Course</option>
+                      </select></div>
                     </div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Update" id="add-coursebtn"></center></div>
                   </form></div>
@@ -348,6 +387,56 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                 </div>
               </div>
             </div>
+          </div>
+          <div class="searchresults">
+          <?php
+          if(isset($_POST['button']))
+          {
+            if($_REQUEST['button']=="Search") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+            {
+              $dept = $_POST["sdept"];
+              $prog = $_POST["tprog"];
+              $cours = $_POST["tcours"];
+
+              if(isset($cours)&& ($cours!="-1"))
+              {
+                $query2 = "Select * from test where Course=$cours;";
+              }
+              else if (isset($prog)&& ($prog!='-1'))
+              {
+                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id where semester_courses.Prog_id=$prog;";
+              }
+              else if(isset($dept)&& ($dept!='-1'))
+              {
+                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id inner join program on program.P_id=semester_courses.Prog_id where program.Department=$dept;";
+              }
+              else
+              {
+                $query2 = "Select * from test;";
+              }
+
+              $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+
+              if(mysqli_num_rows($result2)>0)
+              {
+                echo "<table class='table table-striped' id='studdata'>";
+                echo "<tr><th>Test ID</th><th>Name</th><th>Date of Test</th><th>Max Marks</th><th>Test Category</th><th>Course</th></tr>";
+              while ($row= mysqli_fetch_row($result2))
+              {
+                echo "<tr>";
+                echo "<td>".$row[0]."</td>";
+                echo "<td>".$row[1]."</td>";
+                echo "<td>".$row[2]."</td>";
+                echo "<td>".$row[3]."</td>";
+                echo "<td>".$row[4]."</td>";
+                echo "<td>".$row[5]."</td>";
+                echo "</tr>";
+              }
+                echo "</table>";
+              }
+              mysqli_close($connection);
+            }}
+            ?>
           </div>
         </div>
       </div>
