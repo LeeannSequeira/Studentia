@@ -1,5 +1,20 @@
 <?php
 include "Db_Connection.php"; // db connection
+if(isset($_POST['button']))
+{
+  if($_REQUEST['button']=="Edit") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+  {
+    $roll=$_POST['sroll'];
+    $tid=intval($_GET['tid']);
+    $mk=$_POST['smk'];
+
+    $queryedit = "update test_conducted set Obtained_marks = $mk where Test_id=$tid and Roll_no='$roll';";
+    $resultedit = mysqli_query($connection,$queryedit) or die ("Error in query: ".$queryedit." ".mysqli_connect_error());
+
+    if($resultedit)
+    {echo "<script>alert('Marks successfully Updated');</script>";}
+  }
+}
 ?>
 <html>
 <head>
@@ -28,6 +43,24 @@ include "Db_Connection.php"; // db connection
           });
       });
 
+      $(document).ready(function(){           //Filter dynamic course list
+          $('#sroll').on('change', function(){
+              var r = $(this).val();
+              var tid=$('#mktid').text();
+              if(r && tid){
+                  $.ajax({
+                      url:"markAction.php",
+                      method:"POST",
+                      data: {r:r,tid:tid},
+                      success:function(html){
+                          $('#smk').val(html);
+                      }
+                  });
+              }else{
+                  $('#smk').html('null');
+              }
+          });
+      });
   </script>
 </head>
   <body>
@@ -86,6 +119,41 @@ include "Db_Connection.php"; // db connection
         </form>
         </div>
         <div class="col-md-9" id="function-right-section">  <!-- RIGHT PARTITION------------------------------------------------------------------------------------------------------->
+          <div class="marksEditable">
+            <div id="markeditformcontainer">
+              <form name="mkedit" method="POST" id="mkEd">
+                <div class="row mb-3"><div class="col-6">
+                Test ID:
+              </div><div class="col-6"><span id="mktid">
+                <?php
+                include "Db_Connection.php"; // db connection
+                $tid=intval($_GET['tid']);
+                echo "$tid";
+                ?></span></div></div>
+                <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6">
+                <select class="roundedinput" name="sroll" id="sroll">
+                  <?php
+                  $querygetmk = "select Roll_no from test_conducted where Test_id=$tid;";
+                  $resultgetmk = mysqli_query($connection,$querygetmk) or die ("Error in query: ".$querygetmk." ".mysqli_connect_error());
+                  if($resultgetmk)
+                  {
+                    echo "<option value='-1'>--Roll No--</option>";
+                  	while ($row= mysqli_fetch_row($resultgetmk))  //mettez dans sem_cours tableau
+                  	{
+                      echo "<option value='".$row[0]."'>".$row[0]."</option>";
+                  	}
+                  }
+                  ?>
+                </select></div></div>
+
+                  <div class="row mb-3"><div class="col-6">Mark Obtained</div><div class="col-6"><input class="roundedinput" type="text" name="smk" value="" id="smk"></div></div>
+
+                  <div class="row">
+                      <div class="col-12"><center><input type="submit" name="button" value="Edit" id="st-searchbtn"></center></div>
+                  </div>
+              </form>
+            </div>
+          </div>
           <div class="searchresults">
           <?php
           if(isset($_POST['button']))
@@ -132,7 +200,7 @@ include "Db_Connection.php"; // db connection
               if(mysqli_num_rows($result2)>0)
               {
                 echo "<table class='table table-striped' id='studdata'>";
-                echo "<tr><th>Test ID</th><th>Test Name</th><th>Roll No.</th><th>Student Name</th><th>Marks</th><th>Attempt no.</th></tr>";
+                echo "<tr><th>Test ID</th><th>Test Name</th><th>Roll No.</th><th>Student Name</th><th>Marks</th><th>Attempt no.</th><th>Action</th></tr>";
               while ($row= mysqli_fetch_row($result2))
               {
                 echo "<tr id='".$row[0]."'>";
@@ -142,7 +210,7 @@ include "Db_Connection.php"; // db connection
                 echo "<td>".$row[3]." ".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
                 echo "<td>".$row[6]."</td>";
-                echo "<td><a href='edit-marks.php?tid='".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
+                echo "<td><a href='edit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";
