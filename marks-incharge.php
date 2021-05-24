@@ -95,7 +95,6 @@ include "Db_Connection.php"; // db connection
               $dept = $_POST["sdept"];
               $prog = $_POST["tprog"];
               $cours = $_POST["tcours"];
-              //add test filter
 
               if(isset($cours)&& ($cours!="-1"))
               {

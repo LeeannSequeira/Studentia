@@ -254,11 +254,12 @@ return d.toISOString().slice(0,10) === dateString;
                                           inner join student using(Roll_no)
                                           where semester_courses.Sem_id=$sid and semester_courses.Prog_id=$pid and enroll.Roll_no='$r';";
                           $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
-                          $rowspi= mysqli_fetch_row($resultInsertSem);
-                          $spi=$rowspi[0];
-                          $queryInsertSpi="Update student_spi set SPI=$spi where Roll_no='$r' and Sem_id=$sid;";
-                          $resultInsertSpi = mysqli_query($connection,$queryInsertSpi) or die ("Error in query: ".$queryInsertSpi." ".mysqli_connect_error());
+                          while($rowspi= mysqli_fetch_row($resultInsertSem))
+                          {$spi=$rowspi[0];
 
+                          $queryInsertSpi="Update student_spi set SPI= '$spi' where Roll_no='$r' and Sem_id=$sid;";
+                          $resultInsertSpi = mysqli_query($connection,$queryInsertSpi) or die ("Error in query: ".$queryInsertSpi." ".mysqli_connect_error());
+                        }
                         }
                       }
                     }
