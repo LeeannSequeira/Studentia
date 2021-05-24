@@ -1,3 +1,6 @@
+<?php
+include "Db_Connection.php"; // db connection
+?>
 <html>
 <head>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
@@ -142,95 +145,171 @@ return d.toISOString().slice(0,10) === dateString;
       <div class="row landingrow">
         <div class="col-md-3" id="function-left-section"><!-- LEFT PARTITION----------------------------------------------------------------------------------------------------------->
           <div class="row">
-            <div class="adminfunction"><img id="functionicon-admin" src="images/studenticon.png">&nbsp<span id="functiontitle-admin"> Student</span></div>
+            <div class="adminfunction"><img id="functionicon-admin" src="images/resulticon.png">&nbsp;<span id="functiontitle-admin">&nbsp;Result</span></div>
           </div>
           <form id="studentfilter" name="sfilter" action="" method="POST">
          <div class="row">
-              <div class="col-6 st-colalign">Department</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sdept"><option value="-1" selected>Department</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
+              <div class="col-6 st-colalign">Program</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sprog"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
          </div>
          <div class="row">
              <div class="col-6 st-colalign"> Class</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sclass"><option value="-1" selected>Class</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
          </div>
          <div class="row">
-             <div class="col-6 st-colalign"> Rollno</div><div class="col-6 st-colalign"><input class="roundedinput st-input" type="text" name="sroll"></div>
-         </div>
-         <div class="row">
-             <div class="col-12 st-colalign"><center><input type="submit" value="Search" id="st-searchbtn"></center></div>
+             <div class="col-12 st-colalign"><center><input type="submit" name="button" value="Search" id="st-searchbtn"></center></div>
          </div>
         </form>
         </div>
         <div class="col-md-9" id="function-right-section">  <!-- RIGHT PARTITION------------------------------------------------------------------------------------------------------->
-          <div class="row course-editbtn">
+          <div class="searchresults">
+          <?php
+          if(isset($_POST['button']))
+          {
+            if($_REQUEST['button']=="Search") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+            {
+              //$prog = $_POST["tprog"];
+              //$cours = $_POST["tclass"];
 
-            <div class="col-4"><!--ADD------------------------------------------------------------------------------------------------------->
-              <button class="functionbtn" value="Add" onclick="togglePopupaddst()">Add</button>
-              <div class="popup" id="popup-addst">
-                <div class="overlay"></div>
-                <div class="stcontent">
-                  <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
-                  <span id="addform-title">ADD A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate"></div></div>
-                    <div class="row mb-3"><div class="col-6">Department</div>
-                      <div class="col-6"><select class="roundedinputselect" name="sdept"><option value="-1" selected>Choose Department</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
-                    </div>
-                    <div class="row mb-3"><div class="col-6">Program</div>
-                      <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
-                    </div>
-                    <div class="row mb-3"><div class="col-6">Academic year</div>
-                      <div class="col-6"><select class="roundedinputselect" name="say"><option value="-1" selected>Choose year</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
-                    </div>
-                    <div class="row mb-3"><center><input type="submit" value="Enter" id="add-coursebtn"></center></div>
-                  </form></div>
-                </div>
-              </div>
-            </div>
+              $queryGetRoll = "Select Roll_no from student;";
+              $resultGetRoll = mysqli_query($connection,$queryGetRoll) or die ("Error in query: ".$queryGetRoll." ".mysqli_connect_error());
+              if(mysqli_num_rows($resultGetRoll)>0)
+              {
+                while ($row= mysqli_fetch_row($resultGetRoll))
+                {
+                  $r=$row[0];
 
-            <div class="col-4"><!-- UPDATE------------------------------------------------------------------------------------------------------->
-              <button class="functionbtn" value="update" onclick="togglePopupupdatest()">Update</button>
-              <div class="popup" id="popup-updatest">
-                <div class="overlay"></div>
-                <div class="stcontent">
-                  <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
-                  <span id="addform-title">UPDATE STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="updatest" action="" method="POST" onsubmit="return validateUpdateStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="text" name="sjdate"></div></div>
-                    <div class="row mb-3"><div class="col-6">Department</div>
-                      <div class="col-6"><select class="roundedinputselect" name="sdept"><option value="-1" selected>Choose Department</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
-                    </div>
-                    <div class="row mb-3"><div class="col-6">Program</div>
-                      <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
-                    </div>
-                    <div class="row mb-3"><div class="col-6">Academic year</div>
-                      <div class="col-6"><select class="roundedinputselect" name="say"><option value="-1" selected>Choose year</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
-                    </div>
-                    <div class="row mb-3"><center><input type="submit" value="Enter" id="add-coursebtn"></center></div>
-                  </form></div>
-                </div>
-              </div>
-            </div>
-            <div class="col-4">
-              <button class="functionbtn" value="delete" onclick="togglePopupdeletest()">Delete</button>
-              <div class="popup" id="popup-deletest">
-                <div class="overlay"></div>
-                <div class="stcontent">
-                  <div class="close-btn" onclick="togglePopupdeletest()">×</div><!--popup content-->
-                  <span id="addform-title">DELETE A STUDENT</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="deletest" action="" method="POST" onsubmit="return validateDeleteStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><center><input type="submit" value="Enter" id="add-coursebtn"></center></div>
-                  </form></div>
-                </div>
-              </div>
-            </div>
+                  //calculate course garde
+                //  CASE when sum(select obtained marks from test_conducted where Roll_no='$r')>90 then insert into enroll(Course_grade) values END;
+                  $queryCourse = "select C_id from enroll where Roll_no='$r';";
+                  $resultCourse = mysqli_query($connection,$queryCourse) or die ("Error in query: ".$queryCourse." ".mysqli_connect_error());
+                  if(mysqli_num_rows($resultCourse)>0)
+                  {
+                    while ($rowc= mysqli_fetch_row($resultCourse))
+                    {
+                      $c=$rowc[0];
+                      $queryCourseTotal = "select sum(test_conducted.Obtained_marks) from test_conducted
+                                          inner join test USING (Test_id )
+                                          where Roll_no='1' and test.course=13;";
+                      $resultCourseTotal = mysqli_query($connection,$queryCourseTotal) or die ("Error in query: ".$queryCourseTotal." ".mysqli_connect_error());
+                     $resc=mysqli_fetch_row($resultGetRoll);
+                      $rc=$resc[0];
+
+                      //insert Grade into enroll
+
+                      if(($rc>=85)&&($rc<=100))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='O' and Grade_point=10 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc>=75)&&($rc<85))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='A+' and Grade_point=9 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc>=65)&&($rc<75))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='A' and Grade_point=8 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc>=55)&&($rc<65))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='B+' and Grade_point=7 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc>=50)&&($rc<55))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='B' and Grade_point=6 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc>=45)&&($rc<50))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='C' and Grade_point=5 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc>=40)&&($rc<45))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='P' and Grade_point=4 where Roll_no='$r' and C_id=$c;";
+                      }
+                      else if(($rc<40))
+                      {
+                        $queryEnrollGrade="update enroll set Course_grade='F' and Grade_point=0 where Roll_no='$r' and C_id=$c;";
+                      }
+                      $resultEnrollGrade = mysqli_query($connection,$queryEnrollGrade) or die ("Error in query: ".$queryEnrollGrade." ".mysqli_connect_error());
+
+                    }
+                    //SPI Calculations INCOMPLETE
+                    //for each semester in a program, calculate sum of all courses in the semester and divide by 10, insert it into table SPI
+                    $queryprog="Select P_id from program;";
+                    $resultprog = mysqli_query($connection,$queryprog) or die ("Error in query: ".$queryprog." ".mysqli_connect_error());
+
+                    if($resultprog)
+                    {
+                    while ($rowp= mysqli_fetch_row($resultprog))
+                    {
+                      $pid=$rowp[0];
+                      $querysem="Select Sem_id from semester;";
+                      $resultsem = mysqli_query($connection,$querysem) or die ("Error in query: ".$querysem." ".mysqli_connect_error());
+
+                      if($resultsem)
+                      {
+                        while ($row= mysqli_fetch_row($resultsem))
+                        {
+                          $sid=$row[0];
+                          //for each semester and program get course list
+                          $queryInsertSem="Select sum(Grade_point)/10 from enroll
+                                          inner join semester_courses on enroll.C_id=semester_courses.Course_id
+                                          inner join student using(Roll_no)
+                                          where semester_courses.Sem_id=$sid and semester_courses.Prog_id=$pid and enroll.Roll_no='$r';";
+                          $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
+                          $rowspi= mysqli_fetch_row($resultInsertSem);
+                          $spi=$rowspi[0];
+                          $queryInsertSpi="Update student_spi set SPI=$spi where Roll_no='$r' and Sem_id=$sid;";
+                          $resultInsertSpi = mysqli_query($connection,$queryInsertSpi) or die ("Error in query: ".$queryInsertSpi." ".mysqli_connect_error());
+
+                        }
+                      }
+                    }
+                    }
+
+                  }
+
+                }
+              }
+
+
+
+              if(isset($cours)&& ($cours!="-1"))
+              {
+                $query2 = "Select * from test where Course=$cours;";
+              }
+              else if (isset($prog)&& ($prog!='-1'))
+              {
+                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id where semester_courses.Prog_id=$prog;";
+              }
+              else if(isset($dept)&& ($dept!='-1'))
+              {
+                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id inner join program on program.P_id=semester_courses.Prog_id where program.Department=$dept;";
+              }
+              else
+              {
+                $query2 = "Select * from test;";
+              }
+
+              $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+
+              if(mysqli_num_rows($result2)>0)
+              {
+                echo "<table class='table table-striped' id='studdata'>";
+                echo "<tr><th>Test ID</th><th>Name</th><th>Date of Test</th><th>Max Marks</th><th>Test Category</th><th>Course</th></tr>";
+              while ($row= mysqli_fetch_row($result2))
+              {
+                echo "<tr>";
+                echo "<td>".$row[0]."</td>";
+                echo "<td>".$row[1]."</td>";
+                echo "<td>".$row[2]."</td>";
+                echo "<td>".$row[3]."</td>";
+                echo "<td>".$row[4]."</td>";
+                echo "<td>".$row[5]."</td>";
+                echo "</tr>";
+              }
+                echo "</table>";
+              }
+              mysqli_close($connection);
+            }}
+            ?>
           </div>
         </div>
       </div>

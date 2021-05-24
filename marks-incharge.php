@@ -95,6 +95,7 @@ include "Db_Connection.php"; // db connection
               $dept = $_POST["sdept"];
               $prog = $_POST["tprog"];
               $cours = $_POST["tcours"];
+              //add test filter
 
               if(isset($cours)&& ($cours!="-1"))
               {
@@ -142,7 +143,7 @@ include "Db_Connection.php"; // db connection
                 echo "<td>".$row[3]." ".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
                 echo "<td>".$row[6]."</td>";
-                echo "<td><a href='edit-marks.php?tid='".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
+                echo "<td><a href='edit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";

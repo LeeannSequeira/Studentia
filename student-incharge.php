@@ -33,6 +33,21 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
     $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
   }
   }
+  //insert rows in Student_SPI for SPI calculations
+  $querysem="Select Sem_id from semester;";
+  $resultsem = mysqli_query($connection,$querysem) or die ("Error in query: ".$querysem." ".mysqli_connect_error());
+
+  if($resultsem)
+  {
+  while ($row= mysqli_fetch_row($resultsem))  //mettez dans sem_cours tableau
+  {
+    $sid=$row[0];
+    $queryInsertSem="insert into student_spi(Sem_id, Roll_no) values($sid,'$roll');";
+    $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
+  }
+  }
+
+
   echo "<script>alert('Student added Successfully');</script>";
   mysqli_close($connection);
 }
@@ -85,7 +100,8 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
       $query8="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
       $result8 = mysqli_query($connection,$query8) or die ("Error in query: ".$query8." ".mysqli_connect_error());
     }
-    }
+  }
+  //INSERT INTO TEST CONDUCTED?????
   }
   if(isset($ay))
   {
@@ -100,12 +116,18 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
   $roll = $_POST["sroll"];//get values from form and place them in variables
 
   //efface dans sem_cours tableau (voir le autre tableux)
-  $query = "delete from enroll where roll_no='$roll';";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+  $querydelen = "delete from enroll where roll_no='$roll';";
+  $resultdelen = mysqli_query($connection,$querydelen) or die ("Error in query: ".$querydelen." ".mysqli_connect_error());
+
+  $querydelsp = "delete from student_spi where Roll_no='$roll';";
+  $resultdelsp = mysqli_query($connection,$querydelsp) or die ("Error in query: ".$querydelsp." ".mysqli_connect_error());
+
+  $querydeltest = "delete from test_conducted where Roll_no='$roll';";
+  $resultdeltest = mysqli_query($connection,$querydeltest) or die ("Error in query: ".$querydeltest." ".mysqli_connect_error());
 
   //efface dans Student tableau
-  $query = "delete from student where Roll_no='$roll';";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+  $querydelstud = "delete from student where Roll_no='$roll';";
+  $resultdelstud = mysqli_query($connection,$querydelstud) or die ("Error in query: ".$querydelstud." ".mysqli_connect_error());
 
   echo "<script>alert('Student Record Deleted Successfully');</script>";
   mysqli_close($connection);

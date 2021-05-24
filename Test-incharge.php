@@ -23,7 +23,9 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   $result4 = mysqli_query($connection,$query4) or die ("Error in query: ".$query4." ".mysqli_connect_error());
   $id= mysqli_fetch_row($result4);
 
-  $query2="Select Roll_no from student where Program=$prog;";
+  $query2="select Roll_no from student
+          inner join semester_courses on student.Program =semester_courses.Prog_id
+          where semester_courses.Course_id=$cours;";
   $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
 
   if($result2)
