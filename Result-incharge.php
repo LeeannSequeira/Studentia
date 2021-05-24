@@ -166,8 +166,8 @@ return d.toISOString().slice(0,10) === dateString;
           {
             if($_REQUEST['button']=="Search") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
             {
-              //$prog = $_POST["tprog"];
-              //$cours = $_POST["tclass"];
+              $prog = $_POST["sprog"];
+              $class = $_POST["sclass"];
 
               $queryGetRoll = "Select Roll_no from student;";
               $resultGetRoll = mysqli_query($connection,$queryGetRoll) or die ("Error in query: ".$queryGetRoll." ".mysqli_connect_error());
@@ -188,47 +188,45 @@ return d.toISOString().slice(0,10) === dateString;
                       $c=$rowc[0];
                       $queryCourseTotal = "select sum(test_conducted.Obtained_marks) from test_conducted
                                           inner join test USING (Test_id )
-                                          where Roll_no='1' and test.course=13;";
+                                          where Roll_no='$r' and test.course=$c;";
                       $resultCourseTotal = mysqli_query($connection,$queryCourseTotal) or die ("Error in query: ".$queryCourseTotal." ".mysqli_connect_error());
-                     $resc=mysqli_fetch_row($resultGetRoll);
-                      $rc=$resc[0];
-
+                      $resc=mysqli_fetch_row($resultCourseTotal);
+                      $rc=intval($resc[0]);
                       //insert Grade into enroll
-
                       if(($rc>=85)&&($rc<=100))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='O' and Grade_point=10 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='O', Grade_point=10 where Roll_no='$r' and C_id=$c;";
+
                       }
                       else if(($rc>=75)&&($rc<85))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='A+' and Grade_point=9 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='A+', Grade_point=9 where Roll_no='$r' and C_id=$c;";
                       }
                       else if(($rc>=65)&&($rc<75))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='A' and Grade_point=8 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='A', Grade_point=8 where Roll_no='$r' and C_id=$c;";
                       }
                       else if(($rc>=55)&&($rc<65))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='B+' and Grade_point=7 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='B+', Grade_point=7 where Roll_no='$r' and C_id=$c;";
                       }
                       else if(($rc>=50)&&($rc<55))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='B' and Grade_point=6 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='B', Grade_point=6 where Roll_no='$r' and C_id=$c;";
                       }
                       else if(($rc>=45)&&($rc<50))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='C' and Grade_point=5 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='C', Grade_point=5 where Roll_no='$r' and C_id=$c;";
                       }
                       else if(($rc>=40)&&($rc<45))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='P' and Grade_point=4 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='P', Grade_point=4 where Roll_no='$r' and C_id=$c;";
                       }
                       else if(($rc<40))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='F' and Grade_point=0 where Roll_no='$r' and C_id=$c;";
+                        $queryEnrollGrade="update enroll set Course_grade='F', Grade_point=0 where Roll_no='$r' and C_id=$c;";
                       }
                       $resultEnrollGrade = mysqli_query($connection,$queryEnrollGrade) or die ("Error in query: ".$queryEnrollGrade." ".mysqli_connect_error());
-
                     }
                     //SPI Calculations INCOMPLETE
                     //for each semester in a program, calculate sum of all courses in the semester and divide by 10, insert it into table SPI
@@ -256,9 +254,11 @@ return d.toISOString().slice(0,10) === dateString;
                           $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
                           while($rowspi= mysqli_fetch_row($resultInsertSem))
                           {$spi=$rowspi[0];
-
-                          $queryInsertSpi="Update student_spi set SPI= '$spi' where Roll_no='$r' and Sem_id=$sid;";
+                          if($spi)
+                          {
+                          $queryInsertSpi="Update student_spi set SPI= $spi where Roll_no='$r' and Sem_id=$sid;";
                           $resultInsertSpi = mysqli_query($connection,$queryInsertSpi) or die ("Error in query: ".$queryInsertSpi." ".mysqli_connect_error());
+                        }
                         }
                         }
                       }
@@ -270,40 +270,53 @@ return d.toISOString().slice(0,10) === dateString;
                 }
               }
 
+//------------------SPI CALCULATED---------------------------BELOW: Search result
 
 
-              if(isset($cours)&& ($cours!="-1"))
+              if (isset($prog)&& ($prog!='-1'))
               {
-                $query2 = "Select * from test where Course=$cours;";
-              }
-              else if (isset($prog)&& ($prog!='-1'))
-              {
-                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id where semester_courses.Prog_id=$prog;";
-              }
-              else if(isset($dept)&& ($dept!='-1'))
-              {
-                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id inner join program on program.P_id=semester_courses.Prog_id where program.Department=$dept;";
+                if(isset($class)&& ($class!='-1'))
+                {
+                $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                          INNER JOIN student_spi USING (Roll_no)
+                          where student.Program=$prog and student.Education_year='$class';";
+                }
+                else
+                {
+                  $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                            INNER JOIN student_spi USING (Roll_no)
+                            where student.Program=$prog;";
+                }
               }
               else
               {
-                $query2 = "Select * from test;";
+                if(isset($class)&& ($class!='-1'))
+                {
+                  $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                            INNER JOIN student_spi USING (Roll_no)
+                            where student.Education_year='$class';";
+                }
+                else
+                {
+                  $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                            INNER JOIN student_spi USING (Roll_no);";
+                }
               }
 
-              $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+              $resultres = mysqli_query($connection,$queryres) or die ("Error in query: ".$queryres." ".mysqli_connect_error());
 
-              if(mysqli_num_rows($result2)>0)
+              if(mysqli_num_rows($resultres)>0)
               {
                 echo "<table class='table table-striped' id='studdata'>";
-                echo "<tr><th>Test ID</th><th>Name</th><th>Date of Test</th><th>Max Marks</th><th>Test Category</th><th>Course</th></tr>";
-              while ($row= mysqli_fetch_row($result2))
+                echo "<tr><th>Roll_no</th><th>Name</th><th>Semester</th><th>SPI</th><th>Action</th></tr>";
+              while ($row= mysqli_fetch_row($resultres))
               {
                 echo "<tr>";
                 echo "<td>".$row[0]."</td>";
-                echo "<td>".$row[1]."</td>";
-                echo "<td>".$row[2]."</td>";
-                echo "<td>".$row[3]."</td>";
+                echo "<td>".$row[1]." ".$row[2]." ".$row[3]."</td>";
                 echo "<td>".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
+                echo "<td><a href='result-dec.php?roll=".$row[0]."'><button type='button' value='Result'>Result</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";
