@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: May 20, 2021 at 08:14 AM
+-- Generation Time: May 25, 2021 at 10:51 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 7.3.28
 
@@ -167,47 +167,42 @@ CREATE TABLE `enroll` (
   `C_id` int(11) NOT NULL,
   `Roll_no` varchar(40) NOT NULL,
   `attendance` int(11) NOT NULL,
-  `Course_grade` varchar(5) NOT NULL
+  `Course_grade` varchar(5) NOT NULL,
+  `Grade_point` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `enroll`
 --
 
-INSERT INTO `enroll` (`C_id`, `Roll_no`, `attendance`, `Course_grade`) VALUES
-(1, '1', 0, ''),
-(1, '2', 0, ''),
-(1, '3', 0, ''),
-(2, '1', 0, ''),
-(2, '2', 0, ''),
-(2, '3', 0, ''),
-(3, '1', 0, ''),
-(3, '2', 0, ''),
-(3, '3', 0, ''),
-(4, '1', 0, ''),
-(4, '2', 0, ''),
-(4, '3', 0, ''),
-(5, '1', 0, ''),
-(5, '2', 0, ''),
-(5, '3', 0, ''),
-(6, '1', 0, ''),
-(6, '2', 0, ''),
-(6, '3', 0, ''),
-(7, '1', 0, ''),
-(7, '2', 0, ''),
-(7, '3', 0, ''),
-(10, '1', 0, ''),
-(10, '2', 0, ''),
-(10, '3', 0, ''),
-(12, '1', 0, ''),
-(12, '2', 0, ''),
-(12, '3', 0, ''),
-(13, '1', 0, ''),
-(13, '2', 0, ''),
-(13, '3', 0, ''),
-(14, '1', 0, ''),
-(14, '2', 0, ''),
-(14, '3', 0, '');
+INSERT INTO `enroll` (`C_id`, `Roll_no`, `attendance`, `Course_grade`, `Grade_point`) VALUES
+(1, '1', 0, 'F', 0),
+(1, '2', 0, 'F', 0),
+(2, '1', 0, 'F', 0),
+(2, '2', 0, 'F', 0),
+(3, '1', 0, 'F', 0),
+(3, '2', 0, 'F', 0),
+(3, '3', 0, 'F', 0),
+(4, '1', 0, 'F', 0),
+(4, '2', 0, 'F', 0),
+(5, '1', 0, 'F', 0),
+(5, '2', 0, 'F', 0),
+(6, '1', 0, 'F', 0),
+(6, '2', 0, 'F', 0),
+(7, '1', 0, 'B', 6),
+(7, '2', 0, 'F', 0),
+(8, '3', 0, 'F', 0),
+(9, '3', 0, 'F', 0),
+(10, '1', 0, 'F', 0),
+(10, '2', 0, 'F', 0),
+(12, '1', 0, 'F', 0),
+(12, '2', 0, 'F', 0),
+(13, '1', 0, 'O', 10),
+(13, '2', 0, 'O', 10),
+(13, '3', 0, 'F', 0),
+(14, '1', 0, 'A+', 9),
+(14, '2', 0, 'F', 0),
+(14, '3', 0, 'F', 0);
 
 -- --------------------------------------------------------
 
@@ -317,20 +312,21 @@ CREATE TABLE `student` (
   `Lname` varchar(20) NOT NULL,
   `Dateofjoin` date NOT NULL,
   `Education_year` varchar(20) NOT NULL,
-  `CPI` float(10,5) NOT NULL,
+  `CPI` float(4,2) NOT NULL,
   `Grade` varchar(20) NOT NULL,
   `Gradepoint` float(6,3) NOT NULL,
-  `Program` int(11) NOT NULL
+  `Program` int(11) NOT NULL,
+  `Entitlement_marks` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`Roll_no`, `Fname`, `Mname`, `Lname`, `Dateofjoin`, `Education_year`, `CPI`, `Grade`, `Gradepoint`, `Program`) VALUES
-('1', 'pink', 'light', 'candy', '2021-05-18', '1', 0.00000, '', 0.000, 1),
-('2', 'blue', 'dark', 'sea', '2021-05-17', '1', 0.00000, '', 0.000, 1),
-('3', 'green', 'light', 'grass', '2021-05-10', '1', 0.00000, '', 0.000, 1);
+INSERT INTO `student` (`Roll_no`, `Fname`, `Mname`, `Lname`, `Dateofjoin`, `Education_year`, `CPI`, `Grade`, `Gradepoint`, `Program`, `Entitlement_marks`) VALUES
+('1', 'pink', 'light', 'petunia', '2021-05-12', '1', 0.73, '', 0.000, 1, 10),
+('2', 'grey', 'dark', 'clouds', '2021-05-28', '1', 0.33, '', 0.000, 1, 0),
+('3', 'purple', 'dark', 'lavender', '2021-05-07', '1', 0.00, '', 0.000, 2, 0);
 
 -- --------------------------------------------------------
 
@@ -341,8 +337,32 @@ INSERT INTO `student` (`Roll_no`, `Fname`, `Mname`, `Lname`, `Dateofjoin`, `Educ
 CREATE TABLE `student_spi` (
   `Sem_id` int(11) NOT NULL,
   `Roll_no` varchar(20) NOT NULL,
-  `SPI` int(11) NOT NULL
+  `SPI` float(11,2) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `student_spi`
+--
+
+INSERT INTO `student_spi` (`Sem_id`, `Roll_no`, `SPI`) VALUES
+(1, '1', 1.90),
+(1, '2', 1.00),
+(1, '3', 0.00),
+(2, '1', 2.50),
+(2, '2', 1.00),
+(2, '3', 0.00),
+(3, '1', 0.00),
+(3, '2', 0.00),
+(3, '3', 0.00),
+(4, '1', 0.00),
+(4, '2', 0.00),
+(4, '3', 0.00),
+(5, '1', 0.00),
+(5, '2', 0.00),
+(5, '3', 0.00),
+(6, '1', 0.00),
+(6, '2', 0.00),
+(6, '3', 0.00);
 
 -- --------------------------------------------------------
 
@@ -392,12 +412,23 @@ CREATE TABLE `test` (
 --
 
 INSERT INTO `test` (`Test_id`, `T_name`, `Date_conducted`, `Max_marks`, `Test_category`, `Course`) VALUES
-(1, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
-(2, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
-(3, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
-(4, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
-(5, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13),
-(6, 'SRS Activities', '2021-04-28', 10, 'Presentation', 13);
+(11, 'SRS Activities', '2021-05-13', 10, 'OBT', 13),
+(12, 'SRS Activities', '2021-05-05', 10, 'Assignment', 13),
+(13, 'ISA1', '2021-05-06', 15, 'ISA', 13),
+(14, 'ISA2', '2021-05-14', 15, 'ISA', 13),
+(15, 'ESE', '2021-05-13', 50, 'ESE', 13),
+(16, 'ISA1', '2021-05-06', 15, 'ISA', 6),
+(17, 'ISA2', '2021-05-06', 15, 'ISA', 6),
+(18, 'Crypto', '2021-05-13', 10, 'Assignment', 6),
+(19, 'ESE', '2021-05-07', 50, 'ESE', 6),
+(20, 'new web tech', '2021-05-07', 10, 'Assignment', 6),
+(21, 'ISA1', '2021-05-13', 15, 'ISA', 7),
+(22, 'ISA2', '2021-05-04', 15, 'ISA', 7),
+(23, 'ESE', '2021-05-04', 50, 'ESE', 7),
+(24, 'ass1', '2021-05-06', 10, 'Assignment', 7),
+(25, 'ISA1', '2021-05-21', 15, 'ISA', 14),
+(26, 'ISA2', '2021-05-22', 15, 'ISA', 14),
+(27, 'ESE', '2021-05-07', 50, 'ESE', 14);
 
 -- --------------------------------------------------------
 
@@ -417,9 +448,43 @@ CREATE TABLE `test_conducted` (
 --
 
 INSERT INTO `test_conducted` (`Test_id`, `Roll_no`, `Obtained_marks`, `Attempt_no`) VALUES
-(1, '1', 0, 0),
-(1, '2', 0, 0),
-(1, '3', 0, 0);
+(11, '1', 10, 0),
+(11, '2', 10, 0),
+(12, '1', 10, 0),
+(12, '2', 10, 0),
+(13, '1', 15, 0),
+(13, '2', 15, 0),
+(14, '1', 0, 0),
+(14, '2', 0, 0),
+(15, '1', 50, 0),
+(15, '2', 50, 0),
+(16, '1', 0, 0),
+(16, '2', 0, 0),
+(17, '1', 0, 0),
+(17, '2', 0, 0),
+(18, '1', 0, 0),
+(18, '2', 0, 0),
+(19, '1', 0, 0),
+(19, '2', 0, 0),
+(20, '1', 0, 0),
+(20, '2', 0, 0),
+(21, '1', 0, 0),
+(21, '2', 0, 0),
+(22, '1', 0, 0),
+(22, '2', 0, 0),
+(23, '1', 50, 0),
+(23, '2', 0, 0),
+(24, '1', 0, 0),
+(24, '2', 0, 0),
+(25, '1', 15, 0),
+(25, '2', 15, 0),
+(25, '3', 0, 0),
+(26, '1', 15, 0),
+(26, '2', 0, 0),
+(26, '3', 0, 0),
+(27, '1', 50, 0),
+(27, '2', 0, 0),
+(27, '3', 0, 0);
 
 --
 -- Indexes for dumped tables
@@ -583,7 +648,7 @@ ALTER TABLE `teacher`
 -- AUTO_INCREMENT for table `test`
 --
 ALTER TABLE `test`
-  MODIFY `Test_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `Test_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- Constraints for dumped tables

@@ -146,11 +146,11 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
   {
     document.getElementById("popup-addst").classList.toggle("active");
   }
-  function togglePopupupdatest() //refered from https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/
+  function togglePopupupdatest()
   {
     document.getElementById("popup-updatest").classList.toggle("active");
   }
-  function togglePopupdeletest() //refered from https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/
+  function togglePopupdeletest()
   {
     document.getElementById("popup-deletest").classList.toggle("active");
   }

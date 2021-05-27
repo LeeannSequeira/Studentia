@@ -176,7 +176,7 @@ return d.toISOString().slice(0,10) === dateString;
                 while ($row= mysqli_fetch_row($resultGetRoll))
                 {
                   $r=$row[0];
-
+                  $counter=0;
                   //calculate course garde
                 //  CASE when sum(select obtained marks from test_conducted where Roll_no='$r')>90 then insert into enroll(Course_grade) values END;
                   $queryCourse = "select C_id from enroll where Roll_no='$r';";
@@ -224,7 +224,35 @@ return d.toISOString().slice(0,10) === dateString;
                       }
                       else if(($rc<40))
                       {
-                        $queryEnrollGrade="update enroll set Course_grade='F', Grade_point=0 where Roll_no='$r' and C_id=$c;";
+                        //calculate entitlement marks
+                        $queryEntitlement="Select Entitlement_marks from student where Roll_no='$r';";
+                        $resultpEntitlement= mysqli_query($connection,$queryEntitlement) or die ("Error in query: ".$queryEntitlement." ".mysqli_connect_error());
+                        $rowent= mysqli_fetch_row($resultpEntitlement);
+                        $ent=$rowent[0];
+
+                        if($ent>0 && $counter<1)
+                        {
+                          $rc=$rc+$ent;
+                          if(($rc>=50)&&($rc<55))
+                          {
+                            $queryEnrollGrade="update enroll set Course_grade='\$B', Grade_point=6 where Roll_no='$r' and C_id=$c;"; $counter=$counter+1;
+                          }
+                          else if(($rc>=45)&&($rc<50))
+                          {
+                            $queryEnrollGrade="update enroll set Course_grade='\$C', Grade_point=5 where Roll_no='$r' and C_id=$c;"; $counter=$counter+1;
+                          }
+                          else if(($rc>=40)&&($rc<45))
+                          {
+                            $queryEnrollGrade="update enroll set Course_grade='\$P', Grade_point=4 where Roll_no='$r' and C_id=$c;"; $counter=$counter+1;
+                          }
+                          else if(($rc<40))
+                          {
+                            $queryEnrollGrade="update enroll set Course_grade='F', Grade_point=0 where Roll_no='$r' and C_id=$c;"; $counter=$counter+1;
+                          }
+                        }
+                        else {
+                          $queryEnrollGrade="update enroll set Course_grade='F', Grade_point=0 where Roll_no='$r' and C_id=$c;";
+                        }
                       }
                       $resultEnrollGrade = mysqli_query($connection,$queryEnrollGrade) or die ("Error in query: ".$queryEnrollGrade." ".mysqli_connect_error());
                     }
@@ -259,6 +287,19 @@ return d.toISOString().slice(0,10) === dateString;
                           $queryInsertSpi="Update student_spi set SPI= $spi where Roll_no='$r' and Sem_id=$sid;";
                           $resultInsertSpi = mysqli_query($connection,$queryInsertSpi) or die ("Error in query: ".$queryInsertSpi." ".mysqli_connect_error());
                         }
+
+                        }
+                        //CPI CALCULATION
+                        $queryGetSpi = "select sum(SPI)/count(SPI) from student_spi where Roll_no='$r';";
+                        $resultGetSpi = mysqli_query($connection,$queryGetSpi) or die ("Error in query: ".$queryGetSpi." ".mysqli_connect_error());
+                        $rowcpi= mysqli_fetch_row($resultGetSpi);
+                        $cpi=$rowcpi[0];
+                        if($cpi)
+                        {
+                        $queryEnterCpi = "update student set CPI=$cpi where Roll_no='$r';";
+                        $resultEnterCpi = mysqli_query($connection,$queryEnterCpi) or die ("Error in query: ".$queryEnterCpi." ".mysqli_connect_error());
+
+
                         }
                         }
                       }
@@ -266,6 +307,7 @@ return d.toISOString().slice(0,10) === dateString;
                     }
 
                   }
+
 
                 }
               }
@@ -316,7 +358,7 @@ return d.toISOString().slice(0,10) === dateString;
                 echo "<td>".$row[1]." ".$row[2]." ".$row[3]."</td>";
                 echo "<td>".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
-                echo "<td><a href='result-dec.php?roll=".$row[0]."'><button type='button' value='Result'>Result</button></a></td>";
+                echo "<td><a href='result-dec.php?roll=".$row[0]."&&sem=".$row[4]."'><button type='button' value='Result'>Result</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";
