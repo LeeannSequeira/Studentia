@@ -82,7 +82,7 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
     $query4 = "update student set Dateofjoin='$doj' where Roll_no='$roll';";
     $result4 = mysqli_query($connection,$query4) or die ("Error in query: ".$query4." ".mysqli_connect_error());
   }
-  if(isset($prog)&& ($prog!=null) && ($prog!=""))
+  if(isset($prog)&& ($prog!=null) && ($prog!="-1"))
   {
     $query5 = "update student set Program='$prog' where Roll_no='$roll';";
     $result5 = mysqli_query($connection,$query5) or die ("Error in query: ".$query5." ".mysqli_connect_error());
@@ -249,7 +249,7 @@ return d.toISOString().slice(0,10) === dateString;
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard-incharge.php">Home</a>
+            <a class="nav-link" href="dashboard-incharge.html">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="student-incharge.php">Student</a>
@@ -267,7 +267,13 @@ return d.toISOString().slice(0,10) === dateString;
             <a class="nav-link" href="hallticket-incharge.php">Hall Ticket</a>
           </li>
         </ul>
+
       </div>
+
+        <span class="navbar-text">
+            <a class="nav-link" href="landingpage-login.html">Log Out</a>
+          </span>
+
     </div>
     </nav>
     <!-- END OF NAV---------------------------------------------------------------------------------------------------------------------------------------------------------------------------->

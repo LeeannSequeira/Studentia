@@ -60,7 +60,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard-incharge.php">Home</a>
+            <a class="nav-link" href="dashboard-incharge.html">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="student-incharge.php">Student</a>
@@ -78,7 +78,13 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
             <a class="nav-link" href="hallticket-incharge.php">Hall Ticket</a>
           </li>
         </ul>
+
       </div>
+
+        <span class="navbar-text">
+            <a class="nav-link" href="landingpage-login.html">Log Out</a>
+          </span>
+
     </div>
     </nav>
     <!-- END OF NAV---------------------------------------------------------------------------------------------------------------------------------------------------------------------------->

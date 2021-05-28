@@ -271,31 +271,22 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard-incharge.html">Home</a>
+            <a class="nav-link" href="dashboard-teacher.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="student-incharge.php">Student</a>
+            <a class="nav-link" href="student-teacher.php">Student</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="test-incharge.php">Test</a>
+            <a class="nav-link" href="test-teacher.php">Test</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="marks-incharge.php">Marks</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="result-incharge.php">Result</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="hallticket-incharge.php">Hall Ticket</a>
+            <a class="nav-link" href="marks-teacher.php">Marks</a>
           </li>
         </ul>
-
       </div>
-
-        <span class="navbar-text">
-            <a class="nav-link" href="landingpage-login.html">Log Out</a>
-          </span>
-
+      <span class="navbar-text">
+          <a class="nav-link" href="landingpage-login.html">Log Out</a>
+        </span>
     </div>
     </nav>
     <!-- END OF NAV---------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
