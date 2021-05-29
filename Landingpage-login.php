@@ -15,7 +15,7 @@
           $query="Select Teacher_role from department_teachers where T_id = $un;";
           $result = mysqli_query($connection, $query) or die ("Error in query: ".$query." ".mysqli_connect_error());
           $row= mysqli_fetch_assoc($result);
-          if($row['role']=="incharge")
+          if($row['Teacher_role']=="incharge")
           {
             header("Location: dashboard-incharge.html");
             exit();

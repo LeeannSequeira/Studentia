@@ -14,41 +14,51 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   $prog = $_POST["sprog"];
   $ay = $_POST["say"];
 
-  //mettez dans Student tableau
-  $query = "INSERT INTO student(Roll_no,Fname,Mname,Lname,Dateofjoin,Education_year,program) VALUES ('$roll','$fname','$mname','$lname','$doj','$ay',$prog);";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
-
-  //enroll student in every course belonging to the selected program
-  //cours choisis par le college- avant
-
-  $query2="Select Course_id from semester_courses where Prog_id=$prog;";
-  $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
-
-  if($result2)
+  $queryvalidate = "select * from student where Roll_no='$roll';";
+  $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultvalidate);
+  if($check>0)
   {
-  while ($row= mysqli_fetch_row($result2))  //mettez dans sem_cours tableau
+    echo "<script>alert('OOPS! Student with that roll no. already exists');</script>";
+  }
+  else
   {
-    $cid=$row[0];
-    $query3="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
-    $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
-  }
-  }
-  //insert rows in Student_SPI for SPI calculations
-  $querysem="Select Sem_id from semester;";
-  $resultsem = mysqli_query($connection,$querysem) or die ("Error in query: ".$querysem." ".mysqli_connect_error());
+    //mettez dans Student tableau
+    $query = "INSERT INTO student(Roll_no,Fname,Mname,Lname,Dateofjoin,Education_year,program) VALUES ('$roll','$fname','$mname','$lname','$doj','$ay',$prog);";
+    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
-  if($resultsem)
-  {
-  while ($row= mysqli_fetch_row($resultsem))  //mettez dans sem_cours tableau
-  {
-    $sid=$row[0];
-    $queryInsertSem="insert into student_spi(Sem_id, Roll_no) values($sid,'$roll');";
-    $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
-  }
-  }
+    //enroll student in every course belonging to the selected program
+    //cours choisis par le college- avant
+
+    $query2="Select Course_id from semester_courses where Prog_id=$prog;";
+    $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+
+    if($result2)
+    {
+    while ($row= mysqli_fetch_row($result2))  //mettez dans sem_cours tableau
+    {
+      $cid=$row[0];
+      $query3="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
+      $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
+    }
+    }
+    //insert rows in Student_SPI for SPI calculations
+    $querysem="Select Sem_id from semester;";
+    $resultsem = mysqli_query($connection,$querysem) or die ("Error in query: ".$querysem." ".mysqli_connect_error());
+
+    if($resultsem)
+    {
+    while ($row= mysqli_fetch_row($resultsem))  //mettez dans sem_cours tableau
+    {
+      $sid=$row[0];
+      $queryInsertSem="insert into student_spi(Sem_id, Roll_no) values($sid,'$roll');";
+      $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
+    }
+    }
 
 
-  echo "<script>alert('Student added Successfully');</script>";
+    echo "<script>alert('Student added Successfully');</script>";
+  }
   mysqli_close($connection);
 }
 else if($_REQUEST['button']=="Update") //----------------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
@@ -61,6 +71,15 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
   $prog = $_POST["sprog"];
   $ay = $_POST["say"];
 
+  $queryvalidate = "select * from student where Roll_no='$roll';";
+  $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultvalidate);
+  if(($check==0 )|| ($check==null))
+  {
+    echo "<script>alert('OOPS! Student with that roll no. doesn\'t exist');</script>";
+  }
+  else
+  {
   //verife tous noms pour vider
   if(isset($fname)&& ($fname!=null) && ($fname!=""))
   {
@@ -109,27 +128,38 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
     $result6 = mysqli_query($connection,$query6) or die ("Error in query: ".$query6." ".mysqli_connect_error());
   }
   echo "<script>alert('Student Record Updated Successfully');</script>";
+}
   mysqli_close($connection);
 }
 else if($_REQUEST['button']=="Delete") //------------------------------------------------------------------------------------------------------------------------------DELETE BUTTON
 {
   $roll = $_POST["sroll"];//get values from form and place them in variables
 
-  //efface dans sem_cours tableau (voir le autre tableux)
-  $querydelen = "delete from enroll where roll_no='$roll';";
-  $resultdelen = mysqli_query($connection,$querydelen) or die ("Error in query: ".$querydelen." ".mysqli_connect_error());
+  $queryvalidate = "select * from student where Roll_no='$roll';";
+  $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultvalidate);
+  if(($check==0 )|| ($check==null))
+  {
+    echo "<script>alert('OOPS! Student with that roll no. doesn\'t exist');</script>";
+  }
+  else
+  {
+    //efface dans sem_cours tableau (voir le autre tableux)
+    $querydelen = "delete from enroll where roll_no='$roll';";
+    $resultdelen = mysqli_query($connection,$querydelen) or die ("Error in query: ".$querydelen." ".mysqli_connect_error());
 
-  $querydelsp = "delete from student_spi where Roll_no='$roll';";
-  $resultdelsp = mysqli_query($connection,$querydelsp) or die ("Error in query: ".$querydelsp." ".mysqli_connect_error());
+    $querydelsp = "delete from student_spi where Roll_no='$roll';";
+    $resultdelsp = mysqli_query($connection,$querydelsp) or die ("Error in query: ".$querydelsp." ".mysqli_connect_error());
 
-  $querydeltest = "delete from test_conducted where Roll_no='$roll';";
-  $resultdeltest = mysqli_query($connection,$querydeltest) or die ("Error in query: ".$querydeltest." ".mysqli_connect_error());
+    $querydeltest = "delete from test_conducted where Roll_no='$roll';";
+    $resultdeltest = mysqli_query($connection,$querydeltest) or die ("Error in query: ".$querydeltest." ".mysqli_connect_error());
 
-  //efface dans Student tableau
-  $querydelstud = "delete from student where Roll_no='$roll';";
-  $resultdelstud = mysqli_query($connection,$querydelstud) or die ("Error in query: ".$querydelstud." ".mysqli_connect_error());
+    //efface dans Student tableau
+    $querydelstud = "delete from student where Roll_no='$roll';";
+    $resultdelstud = mysqli_query($connection,$querydelstud) or die ("Error in query: ".$querydelstud." ".mysqli_connect_error());
 
-  echo "<script>alert('Student Record Deleted Successfully');</script>";
+    echo "<script>alert('Student Record Deleted Successfully');</script>";
+}
   mysqli_close($connection);
 }
 }
@@ -178,50 +208,104 @@ return d.toISOString().slice(0,10) === dateString;
     var	z=document.addst.slname.value;
     var	r=document.addst.sroll.value;
     var	date=document.addst.sjdate.value;
+    var regEx = /^[a-z][a-z\s]*$/;
+
     if(r==null||r=="")
      {
       alert("Please enter Rollno");    //roll num
+      return false;
      }
     if(x==null||x=="")
      {
       alert("Please enter First name");    //FIrst name
+      return false;
      }
+     if(!(x.match(regEx)))
+      {
+     alert(	"Oops! invalid name!"	);
+    return	false;
+      }
     if(y==null||y=="")
      {
       alert("Please enter Middle name");     //mid name
+      return false;
      }
+     if(!(y.match(regEx)))
+      {
+        alert(	"Oops! invalid name!"	);
+        return false;
+      }
      if(z==null||z=="")
       {
        alert("Please enter Last name");     //last name
+       return false;
       }
+      if(!(z.match(regEx)))
+       {
+         alert(	"Oops! invalid name!"	);
+         return false;
+       }
       if(datevalidation(date)==false)
       {
        alert("Please enter correct date format");     //date
+       return false;
       }
       if (document.addst.sprog.value == "-1")
       {
         alert("please choose the program");        //Program
+        return false;
       }
       if (document.addst.say.value == "-1")
       {
         alert("please choose the class");        //Program
+        return false;
       }
     return true;
     }
 
     function validateUpdateStudent()
     {
+      var	x=document.updatest.sfname.value;
+      var	y=document.updatest.smname.value;
+      var	z=document.updatest.slname.value;
       var	r=document.updatest.sroll.value;
       var	date=document.updatest.sjdate.value;
+      var regEx = /^[a-z][a-z\s]*$/;
       if(r==null||r=="")
        {
         alert("Please enter Rollno");    //roll num
+        return false;
+       }
+       if((x!=null)&&(x!=""))
+       {
+         if(!(x.match(regEx)))
+          {
+            alert(	"Oops! invalid name!"	);
+            return false;
+          }
+       }
+       if((y!=null)&&(y!=""))
+       {
+         if(!(y.match(regEx)))
+          {
+            alert(	"Oops! invalid name!"	);
+            return false;
+          }
+       }
+       if((z!=null)&&(z!=""))
+       {
+         if(!(z.match(regEx)))
+          {
+            alert(	"Oops! invalid name!"	);
+            return false;
+          }
        }
       if(date!=null&&date!="")
       {
         if(datevalidation(date)==false)
         {
          alert("Please enter correct date format");     //date
+         return false;
         }
       }
       return true;
@@ -233,6 +317,7 @@ return d.toISOString().slice(0,10) === dateString;
         if(r==null||r=="")
          {
           alert("Please enter Rollno");    //roll num
+          return false;
          }
          return true;
       }

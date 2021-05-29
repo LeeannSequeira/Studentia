@@ -8,12 +8,21 @@ if(isset($_POST['button']))
     $tid=intval($_GET['tid']);
     $mk=$_POST['smk'];
 
+    $queryvalidate = "select Max_marks from test where Test_id=$tid;";
+    $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
+    $check=mysqli_fetch_row($resultvalidate);
+    if(($mk<0)||($mk>$check[0]))
+    {
+      echo "<script>alert('OOPS! Maximum mark for this test is".$check[0]."');</script>";
+    }
+    else
+    {
     $queryedit = "update test_conducted set Obtained_marks = $mk where Test_id=$tid and Roll_no='$roll';";
     $resultedit = mysqli_query($connection,$queryedit) or die ("Error in query: ".$queryedit." ".mysqli_connect_error());
 
     if($resultedit)
     {echo "<script>alert('Marks successfully Updated');</script>";}
-  }
+  }}
 }
 ?>
 <html>
@@ -61,6 +70,29 @@ if(isset($_POST['button']))
               }
           });
       });
+
+      function validatmk()
+      {
+        var s=document.mkedit.sroll.value;
+        var r=document.mkedit.smk.value;
+        if(s=="-1")
+         {
+          alert("Please choose student roll number");
+            return false;
+
+         }
+         if(r==null||r=="")
+          {
+           alert("Please enter marks");
+             return false;
+
+          }
+        if(isNaN(r))
+          {
+        alert(	"Oops! Marks are Numeric!"	);
+        return	false;
+          }
+      }
   </script>
 </head>
   <body>
