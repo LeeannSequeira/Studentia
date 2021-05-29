@@ -13,6 +13,16 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   $cours = $_POST["tcours"];
   $prog = $_POST["tprog"];
 
+  $queryval = "select sum(Max_marks) from test where Course=$cours;";
+  $resultval = mysqli_query($connection,$queryval) or die ("Error in query: ".$queryval." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultval);
+  $trial=(intval($max)+$check[0]);
+  if($trial>100)
+  {
+    echo "<script>alert('WARNING: Total Marks for this course will exceed 100');</script>";
+  }
+  else
+  {
   //mettez dans test tableau
   $query = "INSERT INTO test(T_name,Date_conducted,Max_marks,Test_Category,Course) VALUES ('$name','$date',$max,'$cat',$cours);";
   $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
@@ -37,6 +47,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   }
   }
   echo "<script>alert('Test added Successfully');</script>";
+}
   mysqli_close($connection);
 }
 else if($_REQUEST['button']=="Update") //----------------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
@@ -48,6 +59,26 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
   $max = $_POST["tmax"];
   $cours = $_POST["tcours"];
 
+  $queryvalidate = "select * from test where Test_id=$tid;";
+  $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultvalidate);
+  if(($check==0 )|| ($check==null))
+  {
+    echo "<script>alert('OOPS! Test doesn\'t exist');</script>";
+  }
+  else
+  {
+
+  $queryval = "select sum(Max_marks) from test where Course=$cours;";
+  $resultval = mysqli_query($connection,$queryval) or die ("Error in query: ".$queryval." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultval);
+  $trial=(intval($max)+$check[0]);
+  if($trial>100)
+  {
+    echo "<script>alert('WARNING: Total Marks for this course will exceed 100');</script>";
+  }
+  else
+  {
   //verife tous noms pour vider noms
   if(isset($name)&& ($name!=null) && ($name!=""))
   {
@@ -76,12 +107,22 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
     $result5 = mysqli_query($connection,$query5) or die ("Error in query: ".$query5." ".mysqli_connect_error());
   }
   echo "<script>alert('Test Record Updated Successfully');</script>";
+}}
   mysqli_close($connection);
 }
 else if($_REQUEST['button']=="Delete") //------------------------------------------------------------------------------------------------------------------------------DELETE BUTTON
 {
   $tid=$_POST["tid"];
 
+  $queryvalidate = "select * from test where Test_id=$tid;";
+  $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
+  $check=mysqli_fetch_row($resultvalidate);
+  if(($check==0 )|| ($check==null))
+  {
+    echo "<script>alert('OOPS! Test doesn\'t exist');</script>";
+  }
+  else
+  {
   $query6 = "delete from test_conducted where Test_id=$tid;";
   $result6 = mysqli_query($connection,$query6) or die ("Error in query: ".$query6." ".mysqli_connect_error());
 
@@ -91,7 +132,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
 
   echo "<script>alert('Student Record Deleted Successfully');</script>";
   mysqli_close($connection);
-}
+}}
 }
 ?>
 <html>
@@ -156,6 +197,11 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
         return false;
 
      }
+     if(isNaN(r	))
+       {
+     alert(	"Oops! Marks must be Numeric!"	);
+     return	false;
+       }
 
      if (z == "-1")
      {
@@ -181,6 +227,11 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
           return false;
 
        }
+       if(isNaN(r))
+         {
+       alert(	"Oops! Test ID is Numeric!"	);
+       return	false;
+         }
       var	date=document.updatest.tdate.value;
       if(date!=null&&date!="")
       {
@@ -191,9 +242,17 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
 
         }
       }
-      return true;
-      }
 
+      var	m=document.updatest.tmax.value;
+        if((m!=null)&&(m!=""))
+          {if(isNaN(m))
+            {
+          alert(	"Oops! Marks must be Numeric!"	);
+          return	false;
+            }}
+
+        return true;
+        }
       function validateDeleteTest()//Validates Test id
       {
         var	r=document.deletest.tid.value;
@@ -202,6 +261,11 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
           alert("Please enter Test id");
             return false;
          }
+         if(isNaN(r))
+           {
+         alert(	"Oops! Test ID is Numeric!"	);
+         return	false;
+           }
          return true;
       }
 

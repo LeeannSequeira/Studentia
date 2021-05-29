@@ -10,7 +10,7 @@ include "Db_Connection.php"; // db connection
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
   <script type="text/javascript">
 
-  </script>
+  </script> 
 </head>
   <body>
     <!-- LANDING PAGE BASIC PARTITION-------------------------------------------------->
