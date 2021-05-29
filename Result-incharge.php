@@ -141,7 +141,7 @@ return d.toISOString().slice(0,10) === dateString;
       </div>
 
         <span class="navbar-text">
-            <a class="nav-link" href="landingpage-login.html">Log Out</a>
+            <a class="nav-link" href="landingpage-login.php">Log Out</a>
           </span>
 
     </div>

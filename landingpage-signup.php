@@ -48,16 +48,28 @@ mysqli_close($connection);
       {
         var	x=document.signupform.tfname.value;
         var	y=document.signupform.tlname.value;
+        var regEx = /^[a-z][a-z\s]*$/;
+
         if(x==null||x=="")
 		     {
 		      alert("Please enter First name");    //FIrst name
           return false;
 		     }
+         if(!(x.match(regEx)))
+         	{
+         alert(	"Oops! invalid name!"	);
+ 	      return	false;
+         	}
         if(y==null||y=="")
          {
           alert("Please enter Last name");     //last name
           return false;
          }
+         if(!(y.match(regEx)))
+         	{
+         alert(	"Oops! invalid name!"	);
+ 	       return	false;
+         	}
         var	z=document.signupform.tmail.value;
         var atpos=z.indexOf("@");
         var dotpos=z.lastIndexOf(".");
@@ -73,6 +85,11 @@ mysqli_close($connection);
           alert("Please enter password");                    //password and re-password
           return false;
          }
+         if(pass.length<6)
+          {
+           alert("Oops! Password length must be more than 6 characters");                    //password and re-password
+           return false;
+          }
         if(repass!=pass)
          {
           alert("Please re-enter password correctly");
@@ -130,7 +147,7 @@ mysqli_close($connection);
 
 
           <br><span id="signup-question">Already have an account? </span>&nbsp;
-          <button id="signup-button-login" value="Login" onclick="location.href='Landingpage-login.html';">Login</button>
+          <button id="signup-button-login" value="Login" onclick="location.href='Landingpage-login.php';">Login</button>
         </div></div>
       </div>
     </div>

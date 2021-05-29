@@ -1,20 +1,19 @@
 <?php
 include "Db_Connection.php"; // db connection
-if(isset($_POST["button"]))
+if(isset($_POST['button']))
 {
-if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
-{
+  if($_REQUEST['button']=="Edit") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+  {
+    $roll=$_POST['sroll'];
+    $tid=intval($_GET['tid']);
+    $mk=$_POST['smk'];
 
-  $roll = $_POST["sroll"];
-  $mk=$_POST["smk"];
+    $queryedit = "update test_conducted set Obtained_marks = $mk where Test_id=$tid and Roll_no='$roll';";
+    $resultedit = mysqli_query($connection,$queryedit) or die ("Error in query: ".$queryedit." ".mysqli_connect_error());
 
-  //mettez dans Student tableau
-  $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
-
-  echo "<script>alert('Entitlement marks added successfully');</script>";
-  mysqli_close($connection);
-}
+    if($resultedit)
+    {echo "<script>alert('Marks successfully Updated');</script>";}
+  }
 }
 ?>
 <html>
@@ -44,10 +43,24 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
           });
       });
 
-      function togglePopupaddst() //refered from https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/
-      {
-        document.getElementById("popup-addst").classList.toggle("active");
-      }
+      $(document).ready(function(){           //Filter dynamic course list
+          $('#sroll').on('change', function(){
+              var r = $(this).val();
+              var tid=$('#mktid').text();
+              if(r && tid){
+                  $.ajax({
+                      url:"markAction.php",
+                      method:"POST",
+                      data: {r:r,tid:tid},
+                      success:function(html){
+                          $('#smk').val(html);
+                      }
+                  });
+              }else{
+                  $('#smk').html('null');
+              }
+          });
+      });
   </script>
 </head>
   <body>
@@ -60,31 +73,22 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard-incharge.html">Home</a>
+            <a class="nav-link" href="dashboard-teacher.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="student-incharge.php">Student</a>
+            <a class="nav-link" href="student-teacher.php">Student</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="test-incharge.php">Test</a>
+            <a class="nav-link" href="test-teacher.php">Test</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="marks-incharge.php">Marks</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="result-incharge.php">Result</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="hallticket-incharge.php">Hall Ticket</a>
+            <a class="nav-link" href="marks-teacher.php">Marks</a>
           </li>
         </ul>
-
       </div>
-
-        <span class="navbar-text">
-            <a class="nav-link" href="landingpage-login.php">Log Out</a>
-          </span>
-
+      <span class="navbar-text">
+          <a class="nav-link" href="landingpage-login.php">Log Out</a>
+        </span>
     </div>
     </nav>
     <!-- END OF NAV---------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
@@ -112,28 +116,41 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
         </form>
         </div>
         <div class="col-md-9" id="function-right-section">  <!-- RIGHT PARTITION------------------------------------------------------------------------------------------------------->
-          <div class="row course-editbtn">
-            <div class="col-4">
-              <!--________________________________________________________________Empty For Layout_______-->
+          <div class="marksEditable">
+            <div id="markeditformcontainer">
+              <form name="mkedit" method="POST" id="mkEd">
+                <div class="row mb-3"><div class="col-6">
+                Test ID:
+              </div><div class="col-6"><span id="mktid">
+                <?php
+                include "Db_Connection.php"; // db connection
+                $tid=intval($_GET['tid']);
+                echo "$tid";
+                ?></span></div></div>
+                <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6">
+                <select class="roundedinput" name="sroll" id="sroll">
+                  <?php
+                  $querygetmk = "select Roll_no from test_conducted where Test_id=$tid;";
+                  $resultgetmk = mysqli_query($connection,$querygetmk) or die ("Error in query: ".$querygetmk." ".mysqli_connect_error());
+                  if($resultgetmk)
+                  {
+                    echo "<option value='-1'>--Roll No--</option>";
+                  	while ($row= mysqli_fetch_row($resultgetmk))  //mettez dans sem_cours tableau
+                  	{
+                      echo "<option value='".$row[0]."'>".$row[0]."</option>";
+                  	}
+                  }
+                  ?>
+                </select></div></div>
+
+                  <div class="row mb-3"><div class="col-6">Mark Obtained</div><div class="col-6"><input class="roundedinput" type="text" name="smk" value="" id="smk"></div></div>
+
+                  <div class="row">
+                      <div class="col-12"><center><input type="submit" name="button" value="Edit" id="st-searchbtn"></center></div>
+                  </div>
+              </form>
             </div>
-            <div class="col-4">
-              <!--________________________________________________________________Empty For Layout_______-->
-            </div>
-            <div class="col-4"><!--ADD------------------------------------------------------------------------------------------------------->
-              <button class="functionbtn" id="AddAtten" name ="button" value="Add" onclick="togglePopupaddst()">Add Entitlement Marks</button>
-              <div class="popup" id="popup-addst">
-                <div class="overlay"></div>
-                <div class="stcontent">
-                  <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
-                  <span id="addform-title">ADD STUDENT ENTITLEMENT MARKS</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst" method="POST" onSubmit="return validateAddStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">Entitlement marks </div><div class="col-6"><input class="roundedinput" type="text" name="smk"></div></div>
-                    <div class="row mb-3"><center><input type="submit" name="button" value="Add" id="add-coursebtn"></center></div>
-                  </form></div>
-                </div>
-              </div>
-            </div>
+          </div>
           <div class="searchresults">
           <?php
           if(isset($_POST['button']))
@@ -180,7 +197,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
               if(mysqli_num_rows($result2)>0)
               {
                 echo "<table class='table table-striped' id='studdata'>";
-                echo "<tr><th>Test ID</th><th>Test Name</th><th>Roll No.</th><th>Student Name</th><th>Marks</th><th>Attempt no.</th></tr>";
+                echo "<tr><th>Test ID</th><th>Test Name</th><th>Roll No.</th><th>Student Name</th><th>Marks</th><th>Attempt no.</th><th>Action</th></tr>";
               while ($row= mysqli_fetch_row($result2))
               {
                 echo "<tr id='".$row[0]."'>";
@@ -190,7 +207,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
                 echo "<td>".$row[3]." ".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
                 echo "<td>".$row[6]."</td>";
-                echo "<td><a href='edit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
+                echo "<td><a href='tedit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";

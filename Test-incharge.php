@@ -293,7 +293,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
       </div>
 
         <span class="navbar-text">
-            <a class="nav-link" href="landingpage-login.html">Log Out</a>
+            <a class="nav-link" href="landingpage-login.php">Log Out</a>
           </span>
 
     </div>

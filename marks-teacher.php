@@ -74,7 +74,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
         </ul>
       </div>
       <span class="navbar-text">
-          <a class="nav-link" href="landingpage-login.html">Log Out</a>
+          <a class="nav-link" href="landingpage-login.php">Log Out</a>
         </span>
     </div>
     </nav>
@@ -181,7 +181,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
                 echo "<td>".$row[3]." ".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
                 echo "<td>".$row[6]."</td>";
-                echo "<td><a href='edit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
+                echo "<td><a href='tedit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";

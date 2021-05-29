@@ -36,7 +36,7 @@ include "Db_Connection.php"; // db connection
         </ul>
       </div>
       <span class="navbar-text">
-          <a class="nav-link" href="landingpage-login.html">Log Out</a>
+          <a class="nav-link" href="landingpage-login.php">Log Out</a>
         </span>
     </div>
     </nav>

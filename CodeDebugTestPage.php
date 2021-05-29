@@ -23,7 +23,7 @@
 
 Add validations to number of tests in a course
 
-
+Add sorting option in test
 
 
 
@@ -37,8 +37,10 @@ Add marks validation so teacher doesnt add marks higher than max marks
 
 
 
+hallticket attendance validation
+entitlement marks validation
 
-
+edit marks validation
 
 
 
