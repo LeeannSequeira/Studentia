@@ -7,19 +7,30 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
 
   $roll = $_POST["sroll"];
   $mk=$_POST["smk"];
-  if(($mk<0 )|| ($mk>10))
-  {
-    echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
-  }
-  else
-  {
-  //mettez dans Student tableau
-  $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
-  echo "<script>alert('Entitlement marks added successfully');</script>";
+  $queryCh = "Select * from student where Roll_no='$roll';";
+  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
+
+   if((mysqli_fetch_row($resultCh))>0)
+   {
+    if(($mk<0 )|| ($mk>10))
+    {
+      echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
+    }
+    else
+    {
+    //mettez dans Student tableau
+    $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
+    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+
+    echo "<script>alert('Entitlement marks added successfully');</script>";
+  }}
+    else
+    {
+      echo "<script>alert('Roll number does not exist');</script>";
+    }
   mysqli_close($connection);
-}}
+}
 }
 ?>
 <html>
@@ -210,7 +221,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
                 echo "<td>".$row[3]." ".$row[4]."</td>";
                 echo "<td>".$row[5]."</td>";
                 echo "<td>".$row[6]."</td>";
-                echo "<td><a href='edit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
+                echo "<td><a href='tedit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
                 echo "</tr>";
               }
                 echo "</table>";

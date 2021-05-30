@@ -21,28 +21,15 @@
 ++++++++++++++++++++++++++_____TEST_____++++++++++++++++++++++++++++++++++
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Add validations to number of tests in a course
 
 Add sorting option in test
-
+Test Date should not be before 2 years and not after 3 years
 
 
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ++++++++++++++++++++++++++_____MARKS_____++++++++++++++++++++++++++++++++++
 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-Add marks validation so teacher doesnt add marks higher than max marks
-
-
-
-
-
 hallticket attendance validation
-entitlement marks validation
-
-edit marks validation
-
-
-
 
  ?>

@@ -14,6 +14,14 @@ $gen = $_POST["tgen"];
 $dept = $_POST["tdept"];
 $role = $_POST["trole"];
 
+$querymail="Select T_id from teacher where Email='$mail';";
+$resultmail = mysqli_query($connection,$querymail) or die ("Error in query: ".$querymail." ".mysqli_connect_error());
+if((mysqli_fetch_row($resultmail))>0)
+{
+echo "<script>alert('Sorry! Email already exists!');</script>";
+}
+else
+{
 //insert into teacher table
 $query = "INSERT INTO teacher(Fname,Lname, Gender, Password, Email,T_role,Department) VALUES ('$fname','$lname','$gen','$pass','$mail','$role','$dept');";
 $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
@@ -31,6 +39,7 @@ $query = "INSERT INTO department_teachers(Dept_id, T_id, Teacher_role) VALUES ($
 $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
 echo "<script>alert('Your Username is $un');</script>";
+}
 mysqli_close($connection);
 }
 }
@@ -48,7 +57,7 @@ mysqli_close($connection);
       {
         var	x=document.signupform.tfname.value;
         var	y=document.signupform.tlname.value;
-        var regEx = /^[a-z][a-z\s]*$/;
+        var regEx = /^[A-Z][a-z\s]*$/;
 
         if(x==null||x=="")
 		     {
@@ -56,10 +65,10 @@ mysqli_close($connection);
           return false;
 		     }
          if(!(x.match(regEx)))
-         	{
-         alert(	"Oops! invalid name!"	);
- 	      return	false;
-         	}
+          {
+         alert(	"Oops! invalid First name!"	);
+         return	false;
+          }
         if(y==null||y=="")
          {
           alert("Please enter Last name");     //last name
@@ -67,7 +76,7 @@ mysqli_close($connection);
          }
          if(!(y.match(regEx)))
          	{
-         alert(	"Oops! invalid name!"	);
+         alert(	"Oops! invalid Last name!"	);
  	       return	false;
          	}
         var	z=document.signupform.tmail.value;

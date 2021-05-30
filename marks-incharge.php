@@ -7,19 +7,30 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
 
   $roll = $_POST["sroll"];
   $mk=$_POST["smk"];
-  if(($mk<0 )|| ($mk>10))
-  {
-    echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
-  }
-  else
-  {
-  //mettez dans Student tableau
-  $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
-  $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
-  echo "<script>alert('Entitlement marks added successfully');</script>";
+  $queryCh = "Select * from student where Roll_no='$roll';";
+  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
+
+   if((mysqli_fetch_row($resultCh))>0)
+   {
+    if(($mk<0 )|| ($mk>10))
+    {
+      echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
+    }
+    else
+    {
+    //mettez dans Student tableau
+    $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
+    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+
+    echo "<script>alert('Entitlement marks added successfully');</script>";
+  }}
+    else
+    {
+      echo "<script>alert('Roll number does not exist');</script>";
+    }
   mysqli_close($connection);
-}}
+}
 }
 ?>
 <html>

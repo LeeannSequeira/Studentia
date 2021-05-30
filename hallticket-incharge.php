@@ -8,11 +8,21 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   $roll = $_POST["sroll"];
   $attendance=$_POST["sat"];
   $c=$_POST["tcours"];
+
+  $queryCh = "Select * from student where Roll_no='$roll';";
+  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
+
+   if((mysqli_fetch_row($resultCh))>0)
+   {
   //mettez dans Student tableau
   $query = "Update Enroll set attendance=$attendance where Roll_no='$roll' and C_id=$c;";
   $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
   echo "<script>alert('Attendance added successfully');</script>";
+  }
+  else {
+    echo "<script>alert('Roll number does not exist');</script>";
+  }
   mysqli_close($connection);
 }
 }
@@ -72,6 +82,46 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
       }
     return true;
     }
+
+    function validateat()
+    {
+      var	x=document.addst.sroll.value;
+      var	y=document.addst.sat.value;
+      var	z=document.addst.tprog.value;
+      var	a=document.addst.tcours.value;
+
+        if ((x =="")||(x==null))
+        {
+          alert("please enter Roll no.");        //Program
+          return false;
+        }
+        if ((y =="")||(y==null))
+        {
+          alert("please enter the attendance");        //Program
+          return false;
+        }
+        if ((y<0)||(y>100))
+        {
+          alert("Opps! invalid attendance");        //Program
+          return false;
+        }
+        if(isNaN(y))
+          {
+        alert(	"Oops! Attendance is Numeric!"	);
+        return	false;
+          }
+        if (z == "-1")
+        {
+          alert("please choose the Program");        //Program
+          return false;
+        }
+        if (a == "-1")
+        {
+          alert("please choose the Course");        //Program
+          return false;
+        }
+      return true;
+      }
   </script>
 </head>
   <body>
@@ -148,7 +198,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
                 <div class="stcontent">
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD STUDENT ATTENDANCE</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst" method="POST" onSubmit="return validateAddStudent()">
+                  <div id="st-addform"><form id="addcourse-admin" name="addst" method="POST" onSubmit="return validateat()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
                     <div class="row mb-3"><div class="col-6">Attendance(in %)</div><div class="col-6"><input class="roundedinput" type="text" name="sat"></div></div>
                     <div class="row mb-3">

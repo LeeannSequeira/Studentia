@@ -472,20 +472,33 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
 
               if(isset($cours)&& ($cours!="-1"))
               {
-                $query2 = "Select * from test where Course=$cours;";
+                $query2 ="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                        inner join semester_courses on test.Course=semester_courses.Course_id
+                        inner join course on course.C_id=test.Course
+                        where Course=$cours;";
               }
               else if (isset($prog)&& ($prog!='-1'))
               {
-                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id where semester_courses.Prog_id=$prog;";
+                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                        inner join semester_courses on test.Course=semester_courses.Course_id
+                        inner join course on course.C_id=test.Course
+                        where semester_courses.Prog_id=$prog;";
               }
               else if(isset($dept)&& ($dept!='-1'))
               {
-                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,test.Course from test inner join semester_courses on test.Course=semester_courses.Course_id inner join program on program.P_id=semester_courses.Prog_id where program.Department=$dept;";
+                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                        inner join semester_courses on test.Course=semester_courses.Course_id
+                        inner join course on course.C_id=test.Course
+                        where program.Department=$dept;";
               }
               else
               {
-                $query2 = "Select * from test;";
+                $query2 = "select distinct test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                        inner join semester_courses on test.Course=semester_courses.Course_id
+                        inner join course on course.C_id=test.Course;";
               }
+              }
+
 
               $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
 
@@ -507,7 +520,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                 echo "</table>";
               }
               mysqli_close($connection);
-            }}
+            }
             ?>
           </div>
         </div>

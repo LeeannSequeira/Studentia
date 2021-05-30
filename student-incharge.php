@@ -208,7 +208,7 @@ return d.toISOString().slice(0,10) === dateString;
     var	z=document.addst.slname.value;
     var	r=document.addst.sroll.value;
     var	date=document.addst.sjdate.value;
-    var regEx = /^[a-z][a-z\s]*$/;
+    var regEx = /^[A-Z][a-z\s]*$/;
 
     if(r==null||r=="")
      {
@@ -270,7 +270,7 @@ return d.toISOString().slice(0,10) === dateString;
       var	z=document.updatest.slname.value;
       var	r=document.updatest.sroll.value;
       var	date=document.updatest.sjdate.value;
-      var regEx = /^[a-z][a-z\s]*$/;
+      var regEx = /^[A-Z][a-z\s]*$/;
       if(r==null||r=="")
        {
         alert("Please enter Rollno");    //roll num
@@ -467,22 +467,30 @@ return d.toISOString().slice(0,10) === dateString;
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Program=$prog and Education_year='$class' and Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog and Education_year='$class' and Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student where Program=$prog and Education_year='$class';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog and Education_year='$class';";
                     }
                   }
                   else
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Program=$prog and Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog and Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student where Program=$prog;";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog;";
                     }
                   }
                 }
@@ -492,22 +500,29 @@ return d.toISOString().slice(0,10) === dateString;
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Education_year='$class' and Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Education_year='$class' and Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student where Education_year='$class';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Education_year='$class';";
                     }
                   }
                   else
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student;";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id;";
                     }
                   }
                 }
@@ -517,7 +532,7 @@ return d.toISOString().slice(0,10) === dateString;
                 if(mysqli_num_rows($result1)>0)
                 {
                   echo "<table class='table table-striped' id='studdata'>";
-                  echo "<tr><th>Roll no.</th><th>Name</th><th>Registration date</th><th>Class</th><th>Program</th></tr>";
+                  echo "<tr><th>Roll no.</th><th>Name</th><th>Registration date</th><th>Academic Year</th><th>Program</th></tr>";
                 while ($row= mysqli_fetch_row($result1))
                 {
                   echo "<tr>";
@@ -525,7 +540,7 @@ return d.toISOString().slice(0,10) === dateString;
                   echo "<td>".$row[1]." ".$row[2]." ".$row[3]."</td>";
                   echo "<td>".$row[4]."</td>";
                   echo "<td>".$row[5]."</td>";
-                  echo "<td>".$row[9]."</td>";
+                  echo "<td>".$row[6]."</td>";
                   echo "</tr>";
                 }
                   echo "</table>";

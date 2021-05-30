@@ -161,6 +161,9 @@ return d.toISOString().slice(0,10) === dateString;
              <div class="col-6 st-colalign"> Class</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sclass"><option value="-1" selected>Class</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
          </div>
          <div class="row">
+             <div class="col-6 st-colalign"> Semester</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sem"><option value="-1" selected>Semester</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option><option value="5">5</option><option value="6">6</option></select></div>
+         </div>
+         <div class="row">
              <div class="col-12 st-colalign"><center><input type="submit" name="button" value="Search" id="st-searchbtn"></center></div>
          </div>
         </form>
@@ -174,6 +177,7 @@ return d.toISOString().slice(0,10) === dateString;
             {
               $prog = $_POST["sprog"];
               $class = $_POST["sclass"];
+              $semester=$_POST["sem"];
 
               $queryGetRoll = "Select Roll_no from student;";
               $resultGetRoll = mysqli_query($connection,$queryGetRoll) or die ("Error in query: ".$queryGetRoll." ".mysqli_connect_error());
@@ -325,29 +329,65 @@ return d.toISOString().slice(0,10) === dateString;
               {
                 if(isset($class)&& ($class!='-1'))
                 {
+                  if(isset($semester)&& ($semester!='-1'))
+                  {
                 $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
                           INNER JOIN student_spi USING (Roll_no)
-                          where student.Program=$prog and student.Education_year='$class';";
+                          where student.Program=$prog and student.Education_year='$class' and student_spi.Sem_id=$semester;";
+                  }
+                  else
+                  {
+                    $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                              INNER JOIN student_spi USING (Roll_no)
+                              where student.Program=$prog and student.Education_year='$class';";
+                  }
                 }
                 else
                 {
+                  if(isset($semester)&& ($semester!='-1'))
+                  {
                   $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
                             INNER JOIN student_spi USING (Roll_no)
-                            where student.Program=$prog;";
+                            where student.Program=$prog and student_spi.Sem_id=$semester;";
+                  }
+                  else
+                  {
+                    $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                              INNER JOIN student_spi USING (Roll_no)
+                              where student.Program=$prog;";
+                  }
                 }
               }
               else
               {
                 if(isset($class)&& ($class!='-1'))
                 {
+                  if(isset($semester)&& ($semester!='-1'))
+                  {
                   $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
                             INNER JOIN student_spi USING (Roll_no)
-                            where student.Education_year='$class';";
+                            where student.Education_year='$class' and student_spi.Sem_id=$semester;";
+                  }
+                  else
+                  {
+                    $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                              INNER JOIN student_spi USING (Roll_no)
+                              where student.Education_year='$class';";
+                  }
                 }
                 else
                 {
+                  if(isset($semester)&& ($semester!='-1'))
+                  {
                   $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
-                            INNER JOIN student_spi USING (Roll_no);";
+                            INNER JOIN student_spi USING (Roll_no)
+                            where student_spi.Sem_id=$semester;";
+                  }
+                  else
+                  {
+                    $queryres="select student.Roll_no, student.Fname, student.Mname, student.Lname, student_spi.Sem_id,student_spi.SPI FROM student
+                              INNER JOIN student_spi USING (Roll_no);";
+                  }
                 }
               }
 

@@ -10,7 +10,7 @@ include "Db_Connection.php"; // db connection
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
   <script type="text/javascript">
 
-  </script> 
+  </script>
 </head>
   <body>
     <!-- LANDING PAGE BASIC PARTITION-------------------------------------------------->
@@ -82,57 +82,72 @@ include "Db_Connection.php"; // db connection
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Program=$prog and Education_year='$class' and Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog and Education_year='$class' and Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student where Program=$prog and Education_year='$class';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog and Education_year='$class';";
                     }
                   }
                   else
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Program=$prog and Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog and Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student where Program=$prog;";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Program=$prog;";
                     }
                   }
-                }
-                else
-                {
+                  }
+                  else
+                  {
                   If(isset($class)&& ($class!='-1'))
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Education_year='$class' and Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Education_year='$class' and Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student where Education_year='$class';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Education_year='$class';";
                     }
                   }
                   else
                   {
                     if(isset($roll)&& ($roll!=null) && ($roll!=""))
                     {
-                      $query1 = "Select * from student where Roll_no='$roll';";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id
+                                where Roll_no='$roll';";
                     }
                     else
                     {
-                      $query1 = "Select * from student;";
+                      $query1 = "Select student.Roll_no,student.Fname,student.Mname,student.Lname,student.Dateofjoin,student.Education_year, program.P_name from student
+                                inner join program on student.Program=program.P_id;";
                     }
                   }
-                }
+                  }
 
                 $result1 = mysqli_query($connection,$query1) or die ("Error in query: ".$query1." ".mysqli_connect_error()); //Works and obtains result
 
                 if(mysqli_num_rows($result1)>0)
                 {
                   echo "<table class='table table-striped' id='studdata'>";
-                  echo "<tr><th>Roll no.</th><th>Name</th><th>Registration date</th><th>Class</th><th>Program</th></tr>";
+                  echo "<tr><th>Roll no.</th><th>Name</th><th>Registration date</th><th>Academic Year</th><th>Program</th></tr>";
                 while ($row= mysqli_fetch_row($result1))
                 {
                   echo "<tr>";
@@ -140,7 +155,7 @@ include "Db_Connection.php"; // db connection
                   echo "<td>".$row[1]." ".$row[2]." ".$row[3]."</td>";
                   echo "<td>".$row[4]."</td>";
                   echo "<td>".$row[5]."</td>";
-                  echo "<td>".$row[9]."</td>";
+                  echo "<td>".$row[6]."</td>";
                   echo "</tr>";
                 }
                   echo "</table>";
