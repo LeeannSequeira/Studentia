@@ -1,5 +1,33 @@
 <?php
 include "Db_Connection.php"; // db connection
+if(isset($_POST["button"]))
+{
+if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
+
+{  $roll = $_POST["sroll"];
+  $mk=$_POST["smk"];
+
+  $queryCh = "Select * from student where Roll_no='$roll';";
+  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
+
+   if((mysqli_fetch_row($resultCh))>0)
+   {
+    if(($mk<0 )|| ($mk>10))
+    {
+      echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
+    }
+    else
+    {
+    //mettez dans Student tableau
+    $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
+    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+
+    echo "<script>alert('Entitlement marks added successfully');</script>";
+  }}
+    else
+    {
+      echo "<script>alert('Roll number does not exist');</script>";
+    }}}
 if(isset($_POST["rbutton"]))
 {
 if($_REQUEST['rbutton']=="Edit") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
@@ -9,8 +37,6 @@ if($_REQUEST['rbutton']=="Edit") //---------------------------------------------
 include "Db_Connection.php"; // db connection
     $roll=$_POST["rollno"];
   $cours=$_POST["coursid"];
-  echo "<script>alert('$roll  $cours');</script>";
-
 
   $queryCh = "Select test_conducted.Test_id,test.T_name from test_conducted
               inner join test using(Test_id)
@@ -18,15 +44,16 @@ include "Db_Connection.php"; // db connection
   $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
   while($row=mysqli_fetch_row($resultCh))
   {
-    $mk=$_POST["$row[1]"];
+    $mks=$_POST["$row[1]"];
 
-    $queryTest = "update test_conducted set test_conducted.Obtained_marks=$mk
+    $queryTest = "update test_conducted set test_conducted.Obtained_marks=$mks
                 where Roll_no='$roll' and test_conducted.Test_id=".$row[0].";";
     $resultTest = mysqli_query($connection,$queryTest) or die ("Error in query: ".$queryTest." ".mysqli_connect_error());
   }
   echo "<script>alert('Edit Successful');</script>";
 }
 }
+
 
 ?>
 <html>
@@ -95,7 +122,6 @@ include "Db_Connection.php"; // db connection
          {
           alert("Please enter student roll number");
             return false;
-
          }
          if(r==null||r=="")
           {
@@ -108,6 +134,7 @@ include "Db_Connection.php"; // db connection
         alert(	"Oops! Entitlement Marks are Numeric!"	);
         return	false;
           }
+        return true;
       }
 
       function validates()
@@ -131,20 +158,20 @@ include "Db_Connection.php"; // db connection
               return false;
            }
       }
-      function validateAddmk()
+    function validateAddmk()
         {
           var ch=document.getElementsByClassName("editMark");
           var i;
           for (i = 0; i < ch.length; i++)
           {
-            if(isNaN(ch[i]))
+            if(isNaN(ch[i].value))
               {
                 alert(	"Oops! Marks are Numeric!"	);
                 return false;
               }
           }
         return true;
-        }
+      }
   </script>
 </head>
   <body>
@@ -215,8 +242,8 @@ include "Db_Connection.php"; // db connection
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD STUDENT ENTITLEMENT MARKS</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="addst" method="POST" onSubmit="return validateem()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">Entitlement marks </div><div class="col-6"><input class="roundedinput" type="text" name="smk"></div></div>
+                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll" value=""></div></div>
+                    <div class="row mb-3"><div class="col-6">Entitlement marks </div><div class="col-6"><input class="roundedinput" type="text" name="smk" value=""></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Add" id="add-coursebtn"></center></div>
                   </form></div>
                 </div>
@@ -272,7 +299,7 @@ include "Db_Connection.php"; // db connection
                 <div class="stcontent">
                 <div class="close-btn" onclick="togglePopupedit()">×</div><!--popup content-->
                   <span id="addform-title">Edit Student Marks</span><br>
-                  <div id="st-addform"><form id="editcourse-admin" name="addst"  action="" method="POST" onSubmit="return validateAddTest()">
+                  <div id="st-addform"><form id="editcourse-admin" name="editst"  action="" method="POST" onSubmit="return validateAddmk()">
 
 
                   </form></div>

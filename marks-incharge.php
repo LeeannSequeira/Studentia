@@ -1,5 +1,26 @@
 <?php
 include "Db_Connection.php"; // db connection
+if(isset($_POST["button"]))
+{
+if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
+
+{$roll = $_POST["sroll"];
+$mk=$_POST["smk"];
+
+if(($mk<0 )|| ($mk>10))
+{
+  echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
+}
+else
+{
+//mettez dans Student tableau
+$query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
+$result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+
+echo "<script>alert('Entitlement marks added successfully');</script>";
+mysqli_close($connection);
+}
+}}
 if(isset($_POST["rbutton"]))
 {
 if($_REQUEST['rbutton']=="Edit") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
@@ -108,6 +129,7 @@ include "Db_Connection.php"; // db connection
         alert(	"Oops! Entitlement Marks are Numeric!"	);
         return	false;
           }
+        return true;
       }
 
       function validates()
@@ -138,7 +160,7 @@ include "Db_Connection.php"; // db connection
         var i;
         for (i = 0; i < ch.length; i++)
         {
-          if(isNaN(ch[i]))
+          if(isNaN(ch[i].value))
             {
               alert(	"Oops! Marks are Numeric!"	);
               return false;
