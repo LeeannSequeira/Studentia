@@ -122,7 +122,7 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
   }
   //INSERT INTO TEST CONDUCTED?????
   }
-  if(isset($ay))
+  if((isset($ay))&&($ay!="-1"))
   {
     $query6 = "update student set Education_year='$ay' where Roll_no='$roll';";
     $result6 = mysqli_query($connection,$query6) or die ("Error in query: ".$query6." ".mysqli_connect_error());

@@ -172,6 +172,13 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
     return d.toISOString().slice(0,10) === dateString;
     }
 
+    function countWords(str) {
+        str = str.replace(/(^\s*)|(\s*$)/gi,"");
+        str = str.replace(/[ ]{2,}/gi," ");
+        str = str.replace(/\n /,"\n");
+        return str.split(' ').length;
+     }
+
   function validateAddTest() //Validates Test name, Test date, Test max marks, test category
   {
     var	x=document.addst.tname.value;
@@ -185,6 +192,12 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
         return false;
 
      }
+     if(countWords(x)>1)
+     {
+       alert("Test name can only be one word, You can use special characters as word seperaters");
+         return false;
+     }
+
      if(datevalidation(date)==false)
        {
         alert("Please enter correct date format");
@@ -231,6 +244,13 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
          {
        alert(	"Oops! Test ID is Numeric!"	);
        return	false;
+         }
+         var	x=document.updatest.tname.value;
+
+         if(countWords(x)>1)
+         {
+           alert("Test name can only be one word, You can use special characters as word seperaters");
+             return false;
          }
       var	date=document.updatest.tdate.value;
       if(date!=null&&date!="")
