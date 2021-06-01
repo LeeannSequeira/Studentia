@@ -400,10 +400,10 @@ return d.toISOString().slice(0,10) === dateString;
                     <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
                     <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate"></div></div>
                     <div class="row mb-3"><div class="col-6">Program</div>
-                      <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
+                      <div class="col-6"><select class="roundedinputselect" name="sprog" required><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
                     </div>
                     <div class="row mb-3"><div class="col-6">Academic year</div>
-                      <div class="col-6"><select class="roundedinputselect" name="say"><option value="-1" selected>Choose year</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
+                      <div class="col-6"><select class="roundedinputselect" name="say" ><option value="-1" selected>Choose year</option><option value="1">FY</option><option value="2">SY</option><option value="3">TY</option></select></div>
                     </div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Add" id="add-coursebtn"></center></div>
                   </form></div>

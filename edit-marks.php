@@ -7,7 +7,7 @@ if(isset($_POST['button']))
     $roll=$_POST['sroll'];
     $tid=intval($_GET['tid']);
     $mk=$_POST['smk'];
-
+ 
     $queryvalidate = "select Max_marks from test where Test_id=$tid;";
     $resultvalidate = mysqli_query($connection,$queryvalidate) or die ("Error in query: ".$queryvalidate." ".mysqli_connect_error());
     $check=mysqli_fetch_row($resultvalidate);

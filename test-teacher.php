@@ -48,7 +48,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   }
   echo "<script>alert('Test added Successfully');</script>";
 }
-  mysqli_close($connection);
+
 }
 else if($_REQUEST['button']=="Update") //----------------------------------------------------------------------------------------------------------------------------UPDATE BUTTON
 {
@@ -108,7 +108,7 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
   }
   echo "<script>alert('Test Record Updated Successfully');</script>";
 }}
-  mysqli_close($connection);
+
 }
 else if($_REQUEST['button']=="Delete") //------------------------------------------------------------------------------------------------------------------------------DELETE BUTTON
 {
@@ -131,7 +131,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
 
 
   echo "<script>alert('Student Record Deleted Successfully');</script>";
-  mysqli_close($connection);
+
 }}
 }
 ?>
@@ -463,21 +463,21 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
 
               if(isset($cours)&& ($cours!="-1"))
               {
-                $query2 ="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                $query2 ="select distinct test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
                         inner join semester_courses on test.Course=semester_courses.Course_id
                         inner join course on course.C_id=test.Course
                         where Course=$cours;";
               }
               else if (isset($prog)&& ($prog!='-1'))
               {
-                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                $query2="select distinct test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
                         inner join semester_courses on test.Course=semester_courses.Course_id
                         inner join course on course.C_id=test.Course
                         where semester_courses.Prog_id=$prog;";
               }
               else if(isset($dept)&& ($dept!='-1'))
               {
-                $query2="select test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
+                $query2="select distinct test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
                         inner join semester_courses on test.Course=semester_courses.Course_id
                         inner join course on course.C_id=test.Course
                         where program.Department=$dept;";
@@ -487,7 +487,6 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                 $query2 = "select distinct test.Test_id,test.T_name,test.Date_conducted,test.Max_marks,test.Test_Category,course.C_name from test
                         inner join semester_courses on test.Course=semester_courses.Course_id
                         inner join course on course.C_id=test.Course;";
-              }
               }
 
               $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
@@ -508,7 +507,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                 echo "</tr>";
               }
                 echo "</table>";
-              }
+              }}
               mysqli_close($connection);
             }
             ?>

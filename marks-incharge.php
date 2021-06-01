@@ -1,37 +1,33 @@
 <?php
 include "Db_Connection.php"; // db connection
-if(isset($_POST["button"]))
+if(isset($_POST["rbutton"]))
 {
-if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
+if($_REQUEST['rbutton']=="Edit") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
 {
 
-  $roll = $_POST["sroll"];
-  $mk=$_POST["smk"];
 
-  $queryCh = "Select * from student where Roll_no='$roll';";
+include "Db_Connection.php"; // db connection
+    $roll=$_POST["rollno"];
+  $cours=$_POST["coursid"];
+  echo "<script>alert('$roll  $cours');</script>";
+
+
+  $queryCh = "Select test_conducted.Test_id,test.T_name from test_conducted
+              inner join test using(Test_id)
+              where Roll_no='$roll' and test.Course=$cours;";
   $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
+  while($row=mysqli_fetch_row($resultCh))
+  {
+    $mk=$_POST["$row[1]"];
 
-   if((mysqli_fetch_row($resultCh))>0)
-   {
-    if(($mk<0 )|| ($mk>10))
-    {
-      echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
-    }
-    else
-    {
-    //mettez dans Student tableau
-    $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
-    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
-
-    echo "<script>alert('Entitlement marks added successfully');</script>";
-  }}
-    else
-    {
-      echo "<script>alert('Roll number does not exist');</script>";
-    }
-  mysqli_close($connection);
+    $queryTest = "update test_conducted set test_conducted.Obtained_marks=$mk
+                where Roll_no='$roll' and test_conducted.Test_id=".$row[0].";";
+    $resultTest = mysqli_query($connection,$queryTest) or die ("Error in query: ".$queryTest." ".mysqli_connect_error());
+  }
+  echo "<script>alert('Edit Successful');</script>";
 }
 }
+
 ?>
 <html>
 <head>
@@ -41,6 +37,15 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   <script type="text/javascript">
+
+  function togglePopupedit() //refered from https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/
+  {
+    document.getElementById("popup-editst").classList.toggle("active");
+  }
+  function togglePopupaddst() //refered from https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/
+  {
+    document.getElementById("popup-addst").classList.toggle("active");
+  }
 
       $(document).ready(function(){           //Filter dynamic course list
           $('#tpro').on('change', function(){
@@ -60,10 +65,27 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
           });
       });
 
-      function togglePopupaddst() //refered from https://www.gitto.tech/posts/simple-popup-box-using-html-css-and-javascript/
-      {
-        document.getElementById("popup-addst").classList.toggle("active");
-      }
+      $(document).ready(function(){           //Filter dynamic course list
+          $('.Rollbutton').click(function(){
+              var r = $(this).val();
+              var c= $("#"+r).text();
+              if(r){
+                  $.ajax({
+                      url:"upgrade-marksEdit.php",
+                      method:"POST",
+                      data: {r:r,c:c},
+                      success:function(html){
+                          $('#editcourse-admin').html(html); //change the innerhtml of
+                      }
+                  });
+              }else{
+                  $('#editcourse-admin').html('Oops!Something went wrong');
+              }
+          });
+      });
+
+
+
 
       function validateem()
       {
@@ -88,6 +110,42 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
           }
       }
 
+      function validates()
+      {
+        var d=document.sfilter.sdept.value;
+        var p=document.sfilter.tprog.value;
+        var c=document.sfilter.tcours.value;
+        if(d=="-1")
+         {
+          alert("Please choose Department");
+            return false;
+         }
+         if(p=="-1")
+          {
+           alert("Please choose Program");
+             return false;
+          }
+          if(c=="-1")
+           {
+            alert("Please choose Course");
+              return false;;
+           }
+      }
+
+    function validateAddmk()
+      {
+        var ch=document.getElementsByClassName("editMark");
+        var i;
+        for (i = 0; i < ch.length; i++)
+        {
+          if(isNaN(ch[i]))
+            {
+              alert(	"Oops! Marks are Numeric!"	);
+              return false;
+            }
+        }
+      return true;
+      }
   </script>
 </head>
   <body>
@@ -134,7 +192,7 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
           <div class="row">
             <div class="adminfunction"><img id="functionicon-admin" src="images/markicon.png">&nbsp<span id="functiontitle-admin"> Marks</span></div>
           </div>
-          <form id="studentfilter" name="sfilter" action="" method="POST">
+          <form id="studentfilter" name="sfilter" action="" method="POST" onsubmit="return validates()">
          <div class="row">
               <div class="col-6 st-colalign">Department</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="sdept"><option value="-1" selected>Department</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
          </div>
@@ -175,69 +233,62 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
               </div>
             </div>
           <div class="searchresults">
-          <?php
-          if(isset($_POST['button']))
-          {
-            if($_REQUEST['button']=="Search") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+            <?php
+            if(isset($_POST['button']))
             {
-              $dept = $_POST["sdept"];
-              $prog = $_POST["tprog"];
-              $cours = $_POST["tcours"];
+              if($_REQUEST['button']=="Search") //----------------------------------------------------------------------------------------------------------------FILTER BUTTON
+              {
+                $dept = $_POST["sdept"];
+                $prog = $_POST["tprog"];
+                $cours = $_POST["tcours"];
 
-              if(isset($cours)&& ($cours!="-1"))
-              {
-                $query2 = "Select Test_conducted.Test_id,Test.T_name,test_conducted.Roll_no,student.Fname,student.Lname,test_conducted.Obtained_marks,test_conducted.Attempt_no from test
-                          inner join test_conducted USING (Test_id)
-                          inner join student using(Roll_no)
-                          where test.Course=$cours
-                          order by Test_conducted.Test_id;";
-              }
-              else if (isset($prog)&& ($prog!='-1'))
-              {
-                $query2="Select Test_conducted.Test_id,Test.T_name,test_conducted.Roll_no,student.Fname,student.Lname,test_conducted.Obtained_marks,test_conducted.Attempt_no from test
-                        inner join test_conducted USING (Test_id)
-                        inner join semester_courses on test.Course=semester_courses.Course_id
-                        inner join student using(Roll_no)
-                        where semester_courses.Prog_id=$prog and student.Program=$prog
-                        order by Test_conducted.Test_id;";
-              }
-              else if(isset($dept)&& ($dept!='-1'))
-              {
-                $query2="Select Test_conducted.Test_id,Test.T_name,test_conducted.Roll_no,student.Fname,student.Lname,test_conducted.Obtained_marks,test_conducted.Attempt_no from test inner join test_conducted USING (Test_id)
-                        inner join semester_courses on test.Course=semester_courses.Course_id
-                        inner join program on program.P_id=semester_courses.Prog_id
-                        inner join student using(Roll_no)
-                        where program.Department=$dept and student.Program=(SELECT program.P_id from program where program.Department=$dept)
-                        order by Test_conducted.Test_id;";
-              }
-              else
-              {
-                $query2 = "Select Test_conducted.Test_id,Test.T_name,test_conducted.Roll_no,student.Fname,student.Lname,test_conducted.Obtained_marks,test_conducted.Attempt_no from test inner join test_conducted USING (Test_id) inner join student using(Roll_no) order by Test_conducted.Test_id;";
-              }
+                //2- Select all tests in a course and place them as headers
+                $query2 = "Select Test.Test_id, test.T_name from test where test.Course=$cours;";
+                $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+                echo "<table class='table table-striped' id='mktable'>";
+                echo "<tr><th>Roll no.</th><th>Course ID.</th>";
+                while($rowc=mysqli_fetch_row($result2))
+                {
+                  echo "<th>".$rowc[1]."</th>";
+                }
+                echo "<th>Action</th></tr>";
 
-              $result2 = mysqli_query($connection,$query2) or die ("Error in query: ".$query2." ".mysqli_connect_error());
+                $queryroll = "Select student.Roll_no from student where program=$prog;";
+                $resultroll = mysqli_query($connection,$queryroll) or die ("Error in query: ".$queryroll." ".mysqli_connect_error());
+                while($rowr=mysqli_fetch_row($resultroll))
+                {
+                  //3- for each roll number in the program and enrolled in course, get obtained marks and place them in the cells in every row
+                  echo "<tr><td>".$rowr[0]."</td><td id=".$rowr[0].">$cours</td>";
 
-              if(mysqli_num_rows($result2)>0)
-              {
-                echo "<table class='table table-striped' id='studdata'>";
-                echo "<tr><th>Test ID</th><th>Test Name</th><th>Roll No.</th><th>Student Name</th><th>Marks</th><th>Attempt no.</th></tr>";
-              while ($row= mysqli_fetch_row($result2))
-              {
-                echo "<tr id='".$row[0]."'>";
-                echo "<td>".$row[0]."</td>";
-                echo "<td>".$row[1]."</td>";
-                echo "<td>".$row[2]."</td>";
-                echo "<td>".$row[3]." ".$row[4]."</td>";
-                echo "<td>".$row[5]."</td>";
-                echo "<td>".$row[6]."</td>";
-                echo "<td><a href='edit-marks.php?tid=".$row[0]."'><button type='button' value='Edit'>Edit</button></a></td>";
-                echo "</tr>";
-              }
+                  $queryGetMk = "Select test_conducted.Obtained_marks from test_conducted
+                            INNER JOIN test using(Test_id)
+                            where test.Course=$cours and test_conducted.Roll_no='".$rowr[0]."';";
+                  $resultGetMk = mysqli_query($connection,$queryGetMk) or die ("Error in query: ".$queryGetMk." ".mysqli_connect_error());
+                  while ($rowmk=mysqli_fetch_row($resultGetMk))
+                  {
+                    echo "<td>".$rowmk[0]."</td>";
+                  }
+                  echo "<td><button type='button' class='Rollbutton' name='Rollbutton' value='".$rowr[0]."' onclick='togglePopupedit()'>Edit</button></td>";
+                  echo "</tr>";
+                }
                 echo "</table>";
-              }
-              mysqli_close($connection);
-            }}
-            ?>
+
+
+              }}
+              ?>
+
+              <div class="popup" id="popup-editst">
+                <div class="overlay"></div>
+                <div class="stcontent">
+                <div class="close-btn" onclick="togglePopupedit()">×</div><!--popup content-->
+                  <span id="addform-title">Edit Student Marks</span><br>
+                  <div id="st-addform"><form id="editcourse-admin" name="addst"  action="" method="POST" onSubmit="return validateAddmk()">
+
+
+                  </form></div>
+                </div>
+              </div>
+
           </div>
         </div>
       </div>
