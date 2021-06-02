@@ -5,9 +5,10 @@ include "Db_Connection.php"; // db connection
     $roll=$_GET['roll'];
     $sem=$_GET['sem'];
 
-    $queryinfo = "select student.Roll_no, student.Fname, student.Mname, student.Lname, student.Program, student_spi.SPI FROM student
+    $queryinfo = "select student.Roll_no, student.Fname, student.Mname, student.Lname, program.P_name, student_spi.SPI,student.Program FROM student
                   INNER JOIN student_spi USING (Roll_no)
-                  where student.Roll_no=$roll and student_spi.Sem_id=$sem;";
+                  INNER JOIN program on program.P_id=student.Program
+                  where student.Roll_no='$roll' and student_spi.Sem_id=$sem;";
     $resultinfo = mysqli_query($connection,$queryinfo) or die ("Error in query: ".$queryinfo." ".mysqli_connect_error());
 
     if($resultinfo )
@@ -35,9 +36,10 @@ include "Db_Connection.php"; // db connection
             <th>Course</th><th>Grade</th>
           </tr>
           <?php
-            $querysemcours="select semester_courses.Course_id,enroll.Course_grade from semester_courses
+            $querysemcours="select course.C_name ,enroll.Course_grade from semester_courses
                             inner join enroll on semester_courses.Course_id=enroll.C_id
-                            where Prog_id=".$row[4]." and semester_courses.Sem_id=$sem and Roll_no='$roll';";
+                            inner join course on course.C_id=semester_courses.Course_id
+                            where Prog_id=".$row[6]." and semester_courses.Sem_id=$sem and Roll_no='$roll';";
             $resultsemcours = mysqli_query($connection,$querysemcours) or die ("Error in query: ".$querysemcours." ".mysqli_connect_error());
             while($rowCours=mysqli_fetch_row($resultsemcours))
             {

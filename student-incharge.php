@@ -40,6 +40,21 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
       $cid=$row[0];
       $query3="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
       $result3 = mysqli_query($connection,$query3) or die ("Error in query: ".$query3." ".mysqli_connect_error());
+
+      $querytestid="Select Test_id from test where Course=$cid;";
+      $resulttestid = mysqli_query($connection,$querytestid) or die ("Error in query: ".$querytestid." ".mysqli_connect_error());
+
+      if($resulttestid)
+      {
+        while ($id= mysqli_fetch_row($resulttestid))
+        {
+              echo "<script>alert('Checkpoint');</script>";
+          $queryinsertIntoTest="insert into test_conducted(Test_id,Roll_no)values($id[0],'$roll');";
+      $resultinsertIntoTest = mysqli_query($connection,$queryinsertIntoTest) or die ("Error in query: ".$queryinsertIntoTest." ".mysqli_connect_error());
+      }  }
+
+
+
     }
     }
     //insert rows in Student_SPI for SPI calculations
@@ -109,6 +124,9 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
     $query7="delete from enroll where roll_no='$roll';";
     $result7 = mysqli_query($connection,$query7) or die ("Error in query: ".$query7." ".mysqli_connect_error());
 
+    $querydeltestcond="delete from test_conducted where roll_no='$roll';";
+    $resultdeltestcond = mysqli_query($connection,$querydeltestcond) or die ("Error in query: ".$querydeltestcond." ".mysqli_connect_error());
+
     $query7="Select Course_id from semester_courses where Prog_id=$prog;";
     $result7 = mysqli_query($connection,$query7) or die ("Error in query: ".$query7." ".mysqli_connect_error());
     if($result7)
@@ -118,6 +136,17 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
       $cid=$row[0];
       $query8="insert into enroll(C_id, Roll_no) values($cid,'$roll');";
       $result8 = mysqli_query($connection,$query8) or die ("Error in query: ".$query8." ".mysqli_connect_error());
+
+      $querytestid="Select Test_id from test where Course=$cid;";
+      $resulttestid = mysqli_query($connection,$querytestid) or die ("Error in query: ".$querytestid." ".mysqli_connect_error());
+      if($resulttestid)
+      {
+        while ($id= mysqli_fetch_row($resulttestid))
+        {
+              echo "<script>alert('Checkpoint');</script>";
+          $queryinsertIntoTest="insert into test_conducted(Test_id,Roll_no)values($id[0],'$roll');";
+      $resultinsertIntoTest = mysqli_query($connection,$queryinsertIntoTest) or die ("Error in query: ".$queryinsertIntoTest." ".mysqli_connect_error());
+      }  }
     }
   }
   //INSERT INTO TEST CONDUCTED?????
