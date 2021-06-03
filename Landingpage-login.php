@@ -12,10 +12,10 @@
         $result = mysqli_query($connection, $query) or die ("Error in query: ".$query." ".mysqli_connect_error());
         $count=mysqli_num_rows($result);
         if($count == 1){
-          $query="Select Teacher_role from department_teachers where T_id = $un;";
+          $query="Select T_role from teacher where T_id = $un;";
           $result = mysqli_query($connection, $query) or die ("Error in query: ".$query." ".mysqli_connect_error());
           $row= mysqli_fetch_assoc($result);
-          if($row['Teacher_role']=="incharge")
+          if($row['T_role']=="incharge")
           {
             header("Location: dashboard-incharge.html");
             exit();

@@ -34,9 +34,6 @@ while ($row= mysqli_fetch_assoc($result)) {
   $un=$row["T_id"];
 }
 
-//insert into department table
-$query = "INSERT INTO department_teachers(Dept_id, T_id, Teacher_role) VALUES ($dept,$un,'$role');";
-$result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
 echo "<script>alert('Your Username is $un');</script>";
 }

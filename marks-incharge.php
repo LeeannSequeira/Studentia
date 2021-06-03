@@ -30,8 +30,6 @@ if($_REQUEST['rbutton']=="Edit") //---------------------------------------------
 include "Db_Connection.php"; // db connection
     $roll=$_POST["rollno"];
   $cours=$_POST["coursid"];
-  echo "<script>alert('$roll  $cours');</script>";
-
 
   $queryCh = "Select test_conducted.Test_id,test.T_name from test_conducted
               inner join test using(Test_id)

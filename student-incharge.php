@@ -48,7 +48,6 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
       {
         while ($id= mysqli_fetch_row($resulttestid))
         {
-              echo "<script>alert('Checkpoint');</script>";
           $queryinsertIntoTest="insert into test_conducted(Test_id,Roll_no)values($id[0],'$roll');";
       $resultinsertIntoTest = mysqli_query($connection,$queryinsertIntoTest) or die ("Error in query: ".$queryinsertIntoTest." ".mysqli_connect_error());
       }  }
@@ -143,7 +142,6 @@ else if($_REQUEST['button']=="Update") //---------------------------------------
       {
         while ($id= mysqli_fetch_row($resulttestid))
         {
-              echo "<script>alert('Checkpoint');</script>";
           $queryinsertIntoTest="insert into test_conducted(Test_id,Roll_no)values($id[0],'$roll');";
       $resultinsertIntoTest = mysqli_query($connection,$queryinsertIntoTest) or die ("Error in query: ".$queryinsertIntoTest." ".mysqli_connect_error());
       }  }
@@ -251,19 +249,15 @@ return d.toISOString().slice(0,10) === dateString;
      }
      if(!(x.match(regEx)))
       {
-     alert(	"Oops! invalid name!"	);
+     alert(	"Oops! invalid First name!"	);
     return	false;
       }
-    if(y==null||y=="")
-     {
-      alert("Please enter Middle name");     //mid name
-      return false;
-     }
-     if(!(y.match(regEx)))
+    if((y!=null)&&(y!=""))
+     {if(!(isNaN(y)))
       {
-        alert(	"Oops! invalid name!"	);
+        alert(	"Oops! invalid Middle name!"	);
         return false;
-      }
+      }}
      if(z==null||z=="")
       {
        alert("Please enter Last name");     //last name
@@ -271,7 +265,7 @@ return d.toISOString().slice(0,10) === dateString;
       }
       if(!(z.match(regEx)))
        {
-         alert(	"Oops! invalid name!"	);
+         alert(	"Oops! invalid Last name!"	);
          return false;
        }
       if(datevalidation(date)==false)
@@ -452,7 +446,7 @@ return d.toISOString().slice(0,10) === dateString;
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
                     <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
                     <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="text" name="sjdate"></div></div>
+                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate"></div></div>
                     <div class="row mb-3"><div class="col-6">Program</div>
                       <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
                     </div>
