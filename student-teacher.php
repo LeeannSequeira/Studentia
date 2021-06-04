@@ -13,7 +13,19 @@ include "Db_Connection.php"; // db connection
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
   <script type="text/javascript">
-
+   function val()
+   {
+     r=document.sfilter.stroll.value;
+    if((r!=null)&&(r!=""))
+    {
+       if(r.length<10)
+      {
+       alert("Please enter valid Rollno");    //roll num
+       return false;
+      }
+    }
+    return true;
+   }
   </script>
 </head>
   <body>
@@ -51,7 +63,7 @@ include "Db_Connection.php"; // db connection
           <div class="row">
             <div class="adminfunction"><img id="functionicon-admin" src="images/studenticon.png">&nbsp<span id="functiontitle-admin"> Student</span></div>
           </div>
-          <form id="studentfilter" name="sfilter" action="" method="POST">
+          <form id="studentfilter" name="sfilter" action="" method="POST" onsubmit="return val()">
          <div class="row">
               <div class="col-6 st-colalign">Program</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="stprog"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
          </div>

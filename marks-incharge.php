@@ -120,6 +120,11 @@ include "Db_Connection.php"; // db connection
             return false;
 
          }
+         if(s.length<10)
+          {
+           alert("Please enter valid Rollno");    //roll num
+           return false;
+          }
          if(r==null||r=="")
           {
            alert("Please enter Entitlement marks");

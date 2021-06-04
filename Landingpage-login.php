@@ -85,8 +85,8 @@
         <div class="col-md-8" id="landing-right-section">
           <div id="loginVerticalAlign"><div id="loginframe">
             <form id="loginform" name="loginform" method="post" onsubmit="return	validateForm()">
-                <div class="row mb-3"><div class="col-6">Username</div><div class="col-6"><input class="roundedinput" type="text" name="tusername"></div></div>
-                <div class="row mb-3"><div class="col-6">Password</div><div class="col-6"><input class="roundedinput" type="password" name="tpassword"></div></div>
+                <div class="row mb-3"><div class="col-6">Username</div><div class="col-6"><input class="roundedinput" type="text" name="tusername" required></div></div>
+                <div class="row mb-3"><div class="col-6">Password</div><div class="col-6"><input class="roundedinput" type="password" name="tpassword" required></div></div>
                 <div class="row mb-3"><center><input type="submit" value="Login" name="button" id="login-button"></center></div>
             </form>
           </div>

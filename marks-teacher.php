@@ -127,6 +127,11 @@ include "Db_Connection.php"; // db connection
           alert("Please enter student roll number");
             return false;
          }
+         if(s.length<10)
+          {
+           alert("Please enter valid Rollno");    //roll num
+           return false;
+          }
          if(r==null||r=="")
           {
            alert("Please enter Entitlement marks");

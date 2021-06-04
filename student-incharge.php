@@ -246,6 +246,11 @@ return d.toISOString().slice(0,10) === dateString;
       alert("Please enter Rollno");    //roll num
       return false;
      }
+     if(r.length<10)
+      {
+       alert("Please enter valid Rollno");    //roll num
+       return false;
+      }
     if(x==null||x=="")
      {
       alert("Please enter First name");    //FIrst name
@@ -303,6 +308,11 @@ return d.toISOString().slice(0,10) === dateString;
         alert("Please enter Rollno");    //roll num
         return false;
        }
+       if(r.length<10)
+        {
+         alert("Please enter valid Rollno");    //roll num
+         return false;
+        }
        if((x!=null)&&(x!=""))
        {
          if(!(x.match(regEx)))
@@ -346,7 +356,25 @@ return d.toISOString().slice(0,10) === dateString;
           alert("Please enter Rollno");    //roll num
           return false;
          }
+         if(r.length<10)
+          {
+           alert("Please enter valid Rollno");    //roll num
+           return false;
+          }
          return true;
+      }
+      function val()
+      {
+        r=document.sfilter.stroll.value;
+       if((r!=null)&&(r!=""))
+       {
+          if(r.length<10)
+         {
+          alert("Please enter valid Rollno");    //roll num
+          return false;
+         }
+       }
+       return true;
       }
 
   </script>
@@ -395,7 +423,7 @@ return d.toISOString().slice(0,10) === dateString;
           <div class="row">
             <div class="adminfunction"><img id="functionicon-admin" src="images/studenticon.png">&nbsp<span id="functiontitle-admin"> Student</span></div>
           </div>
-          <form id="studentfilter" name="sfilter" action="student-incharge.php" method="POST">
+          <form id="studentfilter" name="sfilter" action="student-incharge.php" method="POST" onsubmit="return val()">
          <div class="row">
               <div class="col-6 st-colalign">Program</div><div class="col-6 st-colalign"><select class="roundedinputselect st-input" name="stprog"><option value="-1" selected>Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
          </div>
@@ -421,11 +449,11 @@ return d.toISOString().slice(0,10) === dateString;
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD A STUDENT</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="addst" action="student-incharge.php" method="POST" onSubmit="return validateAddStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
+                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll" required></div></div>
+                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname" required></div></div>
+                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname" required></div></div>
                     <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate"></div></div>
+                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate" required></div></div>
                     <div class="row mb-3"><div class="col-6">Program</div>
                       <div class="col-6"><select class="roundedinputselect" name="sprog" required><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
                     </div>
@@ -446,11 +474,11 @@ return d.toISOString().slice(0,10) === dateString;
                   <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
                   <span id="addform-title">UPDATE STUDENT</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="updatest" action="student-incharge.php" method="POST" onsubmit="return validateUpdateStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate"></div></div>
+                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"  required></div></div>
+                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname" required></div></div>
+                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname" required></div></div>
+                    <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"  required></div></div>
+                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate" required></div></div>
                     <div class="row mb-3"><div class="col-6">Program</div>
                       <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
                     </div>
@@ -470,7 +498,7 @@ return d.toISOString().slice(0,10) === dateString;
                   <div class="close-btn" onclick="togglePopupdeletest()">×</div><!--popup content-->
                   <span id="addform-title">DELETE A STUDENT</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="deletest" action="student-incharge.php" method="POST" onsubmit="return validateDeleteStudent()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
+                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll" required></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Delete" id="add-coursebtn"></center></div>
                   </form></div>
                 </div>

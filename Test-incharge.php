@@ -420,9 +420,9 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD A TEST</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="addst"  method="POST" onSubmit="return validateAddTest()">
-                    <div class="row mb-3"><div class="col-6">Test Name</div><div class="col-6"><input class="roundedinput" type="text" name="tname"></div></div>
-                    <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="tdate"></div></div>
-                    <div class="row mb-3"><div class="col-6">Maximum marks</div><div class="col-6"><input class="roundedinput" type="text" name="tmax"></div></div>
+                    <div class="row mb-3"><div class="col-6">Test Name</div><div class="col-6"><input class="roundedinput" type="text" name="tname" required></div></div>
+                    <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="tdate" required></div></div>
+                    <div class="row mb-3"><div class="col-6">Maximum marks</div><div class="col-6"><input class="roundedinput" type="text" name="tmax" required></div></div>
                     <div class="row mb-3"><div class="col-6">Test category</div>
                       <div class="col-6"><select class="roundedinputselect" name="tcat"><option value="-1" selected>category</option><option value="ISA">ISA</option><option value="ESE">ESE</option><option value="OBT">OBT</option><option value="Quiz">Quiz</option><option value="Assignment">Assignment</option><option value="Presentation">Presentation</option></select></div>
                     </div>
@@ -448,7 +448,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                   <div class="close-btn" onclick="togglePopupupdatest()">×</div><!--popup content-->
                   <span id="addform-title">UPDATE TEST</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="updatest"  method="POST" onSubmit="return validateUpdateTest()">
-                      <div class="row mb-3"><div class="col-6">Test ID</div><div class="col-6"><input class="roundedinput" type="text" name="tid"></div></div>
+                      <div class="row mb-3"><div class="col-6">Test ID</div><div class="col-6"><input class="roundedinput" type="text" name="tid" required></div></div>
                     <div class="row mb-3"><div class="col-6">Test Name</div><div class="col-6"><input class="roundedinput" type="text" name="tname"></div></div>
                     <div class="row mb-3"><div class="col-6">Test Date(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="tdate"></div></div>
                     <div class="row mb-3"><div class="col-6">Maximum marks</div><div class="col-6"><input class="roundedinput" type="text" name="tmax"></div></div>
@@ -476,7 +476,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
                   <div class="close-btn" onclick="togglePopupdeletest()">×</div><!--popup content-->
                   <span id="addform-title">DELETE A TEST</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="deletest" action="" method="POST" onsubmit="return validateDeleteTest()">
-                    <div class="row mb-3"><div class="col-6">Test ID</div><div class="col-6"><input class="roundedinput" type="text" name="tid"></div></div>
+                    <div class="row mb-3"><div class="col-6">Test ID</div><div class="col-6"><input class="roundedinput" type="text" name="tid" required></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Delete" id="add-coursebtn"></center></div>
                   </form></div>
                 </div>

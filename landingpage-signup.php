@@ -51,7 +51,7 @@ mysqli_close($connection);
       href="images/logo-fav.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="Studentia.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
     <script type="text/javascript">
       function validateForm() //login input validation
       {
@@ -130,12 +130,12 @@ mysqli_close($connection);
           <div id="signupVerticalAlign">
           <div id="signupframe">
             <form id="signupform" name="signupform" action="" method="POST" onsubmit="return validateForm()">
-                <div class="row mb-3"><div class="col-6">First name</div><div class="col-6"><input class="roundedinput" type="text" name="tfname"></div></div>
-                <div class="row mb-3"><div class="col-6">Last name</div><div class="col-6"><input class="roundedinput" type="text" name="tlname"></div></div>
-                <div class="row mb-3"><div class="col-6">Email</div><div class="col-6"><input class="roundedinput" type="text" name="tmail"></div></div>
+                <div class="row mb-3"><div class="col-6">First name</div><div class="col-6"><input class="roundedinput" type="text" name="tfname" required></div></div>
+                <div class="row mb-3"><div class="col-6">Last name</div><div class="col-6"><input class="roundedinput" type="text" name="tlname" required></div></div>
+                <div class="row mb-3"><div class="col-6">Email</div><div class="col-6"><input class="roundedinput" type="mail" name="tmail" required></div></div>
                 <div class="row mb-3"><div class="col-6">Gender</div><div class="col-6"><input type="radio" name="tgen" value="m">Male &nbsp;<input type="radio" name="tgen" value="f">Female</div></div>
-                <div class="row mb-3"><div class="col-6">Password</div><div class="col-6"><input class="roundedinput" type="password" name="tpassword"></div></div>
-                <div class="row mb-3"><div class="col-6">Re-enter password</div><div class="col-6"><input class="roundedinput" type="password" name="trepassword"></div></div>
+                <div class="row mb-3"><div class="col-6">Password</div><div class="col-6"><input class="roundedinput" type="password" name="tpassword" required></div></div>
+                <div class="row mb-3"><div class="col-6">Re-enter password</div><div class="col-6"><input class="roundedinput" type="password" name="trepassword" required></div></div>
               <!--  <div class="row mb-3"><div class="col-6">Courses</div><div class="col-6"></div></div> -->
                 <div class="row mb-3"><div class="col-6">Role</div><div class="col-6"><input type="radio" name="trole" value="teacher">Teacher &nbsp;<input type="radio" name="trole" value="incharge">Exam Incharge</div></div>
                 <div class="row mb-3"><div class="col-6">Department</div>

@@ -95,6 +95,11 @@ if($_REQUEST['button']=="Add") //-----------------------------------------------
           alert("please enter Roll no.");        //Program
           return false;
         }
+        if(x.length<10)
+         {
+          alert("Please enter valid Rollno");    //roll num
+          return false;
+         }
         if ((y =="")||(y==null))
         {
           alert("please enter the attendance");        //Program
