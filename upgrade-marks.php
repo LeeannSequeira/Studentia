@@ -1,5 +1,26 @@
 <?php
 include "Db_Connection.php"; // db connection
+if(isset($_POST["button"]))
+{
+if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
+
+{$roll = $_POST["sroll"];
+$mk=$_POST["smk"];
+
+if(($mk<0 )|| ($mk>10))
+{
+  echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
+}
+else
+{
+//mettez dans Student tableau
+$query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
+$result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+
+echo "<script>alert('Entitlement marks added successfully');</script>";
+mysqli_close($connection);
+}
+}}
 if(isset($_POST["rbutton"]))
 {
 if($_REQUEST['rbutton']=="Edit") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
@@ -9,8 +30,6 @@ if($_REQUEST['rbutton']=="Edit") //---------------------------------------------
 include "Db_Connection.php"; // db connection
     $roll=$_POST["rollno"];
   $cours=$_POST["coursid"];
-  echo "<script>alert('$roll  $cours');</script>";
-
 
   $queryCh = "Select test_conducted.Test_id,test.T_name from test_conducted
               inner join test using(Test_id)
@@ -108,6 +127,7 @@ include "Db_Connection.php"; // db connection
         alert(	"Oops! Entitlement Marks are Numeric!"	);
         return	false;
           }
+        return true;
       }
 
       function validates()
@@ -128,8 +148,23 @@ include "Db_Connection.php"; // db connection
           if(c=="-1")
            {
             alert("Please choose Course");
-              return false;
+              return false;;
            }
+      }
+
+    function validateAddmk()
+      {
+        var ch=document.getElementsByClassName("editMark");
+        var i;
+        for (i = 0; i < ch.length; i++)
+        {
+          if(isNaN(ch[i].value))
+            {
+              alert(	"Oops! Marks are Numeric!"	);
+              return false;
+            }
+        }
+      return true;
       }
   </script>
 </head>
@@ -143,22 +178,31 @@ include "Db_Connection.php"; // db connection
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" href="dashboard-teacher.html">Home</a>
+            <a class="nav-link" href="dashboard-incharge.html">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="student-teacher.php">Student</a>
+            <a class="nav-link" href="student-incharge.php">Student</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="test-teacher.php">Test</a>
+            <a class="nav-link" href="test-incharge.php">Test</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="marks-teacher.php">Marks</a>
+            <a class="nav-link" href="marks-incharge.php">Marks</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="result-incharge.php">Result</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="hallticket-incharge.php">Hall Ticket</a>
           </li>
         </ul>
+
       </div>
-      <span class="navbar-text">
-          <a class="nav-link" href="landingpage-login.php">Log Out</a>
-        </span>
+
+        <span class="navbar-text">
+            <a class="nav-link" href="landingpage-login.php">Log Out</a>
+          </span>
+
     </div>
     </nav>
     <!-- END OF NAV---------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
@@ -258,7 +302,7 @@ include "Db_Connection.php"; // db connection
                 <div class="stcontent">
                 <div class="close-btn" onclick="togglePopupedit()">×</div><!--popup content-->
                   <span id="addform-title">Edit Student Marks</span><br>
-                  <div id="st-addform"><form id="editcourse-admin" name="addst"  action="" method="POST" onSubmit="return validateAddTest()">
+                  <div id="st-addform"><form id="editcourse-admin" name="addst"  action="" method="POST" onSubmit="return validateAddmk()">
 
 
                   </form></div>
