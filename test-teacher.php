@@ -130,7 +130,7 @@ else if($_REQUEST['button']=="Delete") //---------------------------------------
   $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
 
 
-  echo "<script>alert('Student Record Deleted Successfully');</script>";
+  echo "<script>alert('Test Deleted Successfully');</script>";
 
 }}
 }
