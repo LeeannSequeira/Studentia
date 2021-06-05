@@ -38,7 +38,7 @@ include "Db_Connection.php"; // db connection
     $roll=$_POST["rollno"];
   $cours=$_POST["coursid"];
 
-  $queryCh = "Select test_conducted.Test_id,test.T_name from test_conducted
+  $queryCh = "Select test_conducted.Test_id,test.T_name,test.Max_marks from test_conducted
               inner join test using(Test_id)
               where Roll_no='$roll' and test.Course=$cours;";
   $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
@@ -46,14 +46,19 @@ include "Db_Connection.php"; // db connection
   {
     $mks=$_POST["$row[1]"];
 
+    if((($mks)<0)||(($mks)>$row[2]))
+    {
+      echo "<script>alert('Edit failed: enter marks for $row[1] between 0 and $row[2] ');</script>";
+    }
+    else {
+
     $queryTest = "update test_conducted set test_conducted.Obtained_marks=$mks
                 where Roll_no='$roll' and test_conducted.Test_id=".$row[0].";";
     $resultTest = mysqli_query($connection,$queryTest) or die ("Error in query: ".$queryTest." ".mysqli_connect_error());
-  }
-  echo "<script>alert('Edit Successful');</script>";
+    echo "<script>alert('Edit Successful for test: $row[1]');</script>";
+  }}
 }
 }
-
 
 ?>
 <html>
@@ -167,7 +172,7 @@ include "Db_Connection.php"; // db connection
               return false;
            }
       }
-    function validateAddmk()
+  function validateAddmk()
         {
           var ch=document.getElementsByClassName("editMark");
           var i;

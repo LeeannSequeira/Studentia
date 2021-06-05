@@ -20,7 +20,11 @@ if(isset($_POST["r"]))
       echo "<div class='row mb-3'><div class='col-6 '>".$rowtm[0]."</div><div class='col-6'><input class='roundedinput editMark' type='text' name='".$rowtm[0]."' value='".$rowtm[1]."'></div></div>";
     }
     echo "<div class='row'><div class='col-12'><center><input type='submit' name='rbutton' value='Edit' id='st-searchbtn'></center></div></div>";
-    
+
+
+
+
+
   //   mysqli_close($connection);
   }
  ?>
