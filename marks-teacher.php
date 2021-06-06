@@ -38,11 +38,11 @@ include "Db_Connection.php"; // db connection
     $roll=$_POST["rollno"];
   $cours=$_POST["coursid"];
 
-  $queryCh = "Select test_conducted.Test_id,test.T_name,test.Max_marks from test_conducted
+  $queryChe = "Select test_conducted.Test_id,test.T_name,test.Max_marks from test_conducted
               inner join test using(Test_id)
               where Roll_no='$roll' and test.Course=$cours;";
-  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
-  while($row=mysqli_fetch_row($resultCh))
+  $resultChe = mysqli_query($connection,$queryChe) or die ("Error in query: ".$queryChe." ".mysqli_connect_error());
+  while($row=mysqli_fetch_row($resultChe))
   {
     $mks=$_POST["$row[1]"];
 

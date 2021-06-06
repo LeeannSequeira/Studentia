@@ -4,23 +4,30 @@ if(isset($_POST["button"]))
 {
 if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
 
-{$roll = $_POST["sroll"];
-$mk=$_POST["smk"];
+{  $roll = $_POST["sroll"];
+  $mk=$_POST["smk"];
 
-if(($mk<0 )|| ($mk>10))
-{
-  echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
-}
-else
-{
-//mettez dans Student tableau
-$query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
-$result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+  $queryCh = "Select * from student where Roll_no='$roll';";
+  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
 
-echo "<script>alert('Entitlement marks added successfully');</script>";
-mysqli_close($connection);
-}
-}}
+   if((mysqli_fetch_row($resultCh))>0)
+   {
+    if(($mk<0 )|| ($mk>10))
+    {
+      echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
+    }
+    else
+    {
+    //mettez dans Student tableau
+    $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
+    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
+
+    echo "<script>alert('Entitlement marks added successfully');</script>";
+  }}
+    else
+    {
+      echo "<script>alert('Roll number does not exist');</script>";
+    }}}
 if(isset($_POST["rbutton"]))
 {
 if($_REQUEST['rbutton']=="Edit") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
@@ -31,19 +38,25 @@ include "Db_Connection.php"; // db connection
     $roll=$_POST["rollno"];
   $cours=$_POST["coursid"];
 
-  $queryCh = "Select test_conducted.Test_id,test.T_name from test_conducted
+  $queryChe = "Select test_conducted.Test_id,test.T_name,test.Max_marks from test_conducted
               inner join test using(Test_id)
               where Roll_no='$roll' and test.Course=$cours;";
-  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
-  while($row=mysqli_fetch_row($resultCh))
+  $resultChe = mysqli_query($connection,$queryChe) or die ("Error in query: ".$queryChe." ".mysqli_connect_error());
+  while($row=mysqli_fetch_row($resultChe))
   {
-    $mk=$_POST["$row[1]"];
+    $mks=$_POST["$row[1]"];
 
-    $queryTest = "update test_conducted set test_conducted.Obtained_marks=$mk
+    if((($mks)<0)||(($mks)>$row[2]))
+    {
+      echo "<script>alert('Edit failed: enter marks for $row[1] between 0 and $row[2] ');</script>";
+    }
+    else {
+
+    $queryTest = "update test_conducted set test_conducted.Obtained_marks=$mks
                 where Roll_no='$roll' and test_conducted.Test_id=".$row[0].";";
     $resultTest = mysqli_query($connection,$queryTest) or die ("Error in query: ".$queryTest." ".mysqli_connect_error());
-  }
-  echo "<script>alert('Edit Successful');</script>";
+    echo "<script>alert('Edit Successful for test: $row[1]');</script>";
+  }}
 }
 }
 
@@ -118,7 +131,6 @@ include "Db_Connection.php"; // db connection
          {
           alert("Please enter student roll number");
             return false;
-
          }
          if(s.length<10)
           {
@@ -157,23 +169,22 @@ include "Db_Connection.php"; // db connection
           if(c=="-1")
            {
             alert("Please choose Course");
-              return false;;
+              return false;
            }
       }
-
-    function validateAddmk()
-      {
-        var ch=document.getElementsByClassName("editMark");
-        var i;
-        for (i = 0; i < ch.length; i++)
+  function validateAddmk()
         {
-          if(isNaN(ch[i].value))
-            {
-              alert(	"Oops! Marks are Numeric!"	);
-              return false;
-            }
-        }
-      return true;
+          var ch=document.getElementsByClassName("editMark");
+          var i;
+          for (i = 0; i < ch.length; i++)
+          {
+            if(isNaN(ch[i].value))
+              {
+                alert(	"Oops! Marks are Numeric!"	);
+                return false;
+              }
+          }
+        return true;
       }
   </script>
 </head>
@@ -254,8 +265,8 @@ include "Db_Connection.php"; // db connection
                   <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
                   <span id="addform-title">ADD STUDENT ENTITLEMENT MARKS</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="addst" method="POST" onSubmit="return validateem()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"></div></div>
-                    <div class="row mb-3"><div class="col-6">Entitlement marks </div><div class="col-6"><input class="roundedinput" type="text" name="smk"></div></div>
+                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll" value=""></div></div>
+                    <div class="row mb-3"><div class="col-6">Entitlement marks </div><div class="col-6"><input class="roundedinput" type="text" name="smk" value=""></div></div>
                     <div class="row mb-3"><center><input type="submit" name="button" value="Add" id="add-coursebtn"></center></div>
                   </form></div>
                 </div>
@@ -311,7 +322,7 @@ include "Db_Connection.php"; // db connection
                 <div class="stcontent">
                 <div class="close-btn" onclick="togglePopupedit()">×</div><!--popup content-->
                   <span id="addform-title">Edit Student Marks</span><br>
-                  <div id="st-addform"><form id="editcourse-admin" name="addst"  action="" method="POST" onSubmit="return validateAddmk()">
+                  <div id="st-addform"><form id="editcourse-admin" name="editst"  action="" method="POST" onSubmit="return validateAddmk()">
 
 
                   </form></div>

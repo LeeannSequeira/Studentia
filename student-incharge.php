@@ -475,10 +475,10 @@ return d.toISOString().slice(0,10) === dateString;
                   <span id="addform-title">UPDATE STUDENT</span><br>
                   <div id="st-addform"><form id="addcourse-admin" name="updatest" action="student-incharge.php" method="POST" onsubmit="return validateUpdateStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll"  required></div></div>
-                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname" required></div></div>
-                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname" required></div></div>
-                    <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"  required></div></div>
-                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate" required></div></div>
+                    <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname" ></div></div>
+                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname" ></div></div>
+                    <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"  ></div></div>
+                    <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate" ></div></div>
                     <div class="row mb-3"><div class="col-6">Program</div>
                       <div class="col-6"><select class="roundedinputselect" name="sprog"><option value="-1" selected>Choose Program</option><option value="1">BCA</option><option value="2">BBA</option><option value="3">BAMC</option></select></div>
                     </div>
