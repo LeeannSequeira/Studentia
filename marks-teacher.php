@@ -1,33 +1,5 @@
 <?php
 include "Db_Connection.php"; // db connection
-if(isset($_POST["button"]))
-{
-if($_REQUEST['button']=="Add") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
-
-{  $roll = $_POST["sroll"];
-  $mk=$_POST["smk"];
-
-  $queryCh = "Select * from student where Roll_no='$roll';";
-  $resultCh = mysqli_query($connection,$queryCh) or die ("Error in query: ".$queryCh." ".mysqli_connect_error());
-
-   if((mysqli_fetch_row($resultCh))>0)
-   {
-    if(($mk<0 )|| ($mk>10))
-    {
-      echo "<script>alert('OOPS! Enter entitlement marks between 0 and 10');</script>";
-    }
-    else
-    {
-    //mettez dans Student tableau
-    $query = "Update student set Entitlement_marks=$mk where Roll_no='$roll';";
-    $result = mysqli_query($connection,$query) or die ("Error in query: ".$query." ".mysqli_connect_error());
-
-    echo "<script>alert('Entitlement marks added successfully');</script>";
-  }}
-    else
-    {
-      echo "<script>alert('Roll number does not exist');</script>";
-    }}}
 if(isset($_POST["rbutton"]))
 {
 if($_REQUEST['rbutton']=="Edit") //---------------------------------------------------------------------------------------------------------------------------------ADD BUTTON
@@ -120,36 +92,6 @@ include "Db_Connection.php"; // db connection
           });
       });
 
-
-
-
-      function validateem()
-      {
-        var s=document.addst.sroll.value;
-        var r=document.addst.smk.value;
-        if(s==null||s=="")
-         {
-          alert("Please enter student roll number");
-            return false;
-         }
-         if(s.length<10)
-          {
-           alert("Please enter valid Rollno");    //roll num
-           return false;
-          }
-         if(r==null||r=="")
-          {
-           alert("Please enter Entitlement marks");
-             return false;
-
-          }
-        if(isNaN(r))
-          {
-        alert(	"Oops! Entitlement Marks are Numeric!"	);
-        return	false;
-          }
-        return true;
-      }
 
       function validates()
       {
@@ -249,19 +191,7 @@ include "Db_Connection.php"; // db connection
               <!--________________________________________________________________Empty For Layout_______-->
             </div>
             <div class="col-4"><!--ADD------------------------------------------------------------------------------------------------------->
-              <button class="functionbtn" id="AddAtten" name ="button" value="Add" onclick="togglePopupaddst()">Add Entitlement Marks</button>
-              <div class="popup" id="popup-addst">
-                <div class="overlay"></div>
-                <div class="stcontent">
-                  <div class="close-btn" onclick="togglePopupaddst()">×</div><!--popup content-->
-                  <span id="addform-title">ADD STUDENT ENTITLEMENT MARKS</span><br>
-                  <div id="st-addform"><form id="addcourse-admin" name="addst" method="POST" onSubmit="return validateem()">
-                    <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll" value=""></div></div>
-                    <div class="row mb-3"><div class="col-6">Entitlement marks </div><div class="col-6"><input class="roundedinput" type="text" name="smk" value=""></div></div>
-                    <div class="row mb-3"><center><input type="submit" name="button" value="Add" id="add-coursebtn"></center></div>
-                  </form></div>
-                </div>
-              </div>
+              
             </div>
           <div class="searchresults">
             <?php
