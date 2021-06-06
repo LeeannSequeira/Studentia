@@ -26,10 +26,12 @@ include "Db_Connection.php"; // db connection
   <body>
     <div class="container" id="resBorder">
       <div class="row mb-3"><center><h2>RESULT</h2></center></div>
+      <div class="row">   <div class="col-6" style="width: 60%;">
       <div class="row mb-3">Name: <?php echo " ".$row[1]." ".$row[2]." ".$row[3];?></div>
       <div class="row mb-3">Roll no: <?php echo " ".$row[0];?></div>
       <div class="row mb-3">Program: <?php echo " ".$row[4];?></div>
       <div class="row mb-3">Semester:<?php echo " $sem";?> </div>
+    </div><div class="col-1"></div><div id="stimg" class="col-5">Paste Photo here</div></div>
       <div class="row mb-3">
         <table class="table table-striped" id="studgrade">
           <tr>

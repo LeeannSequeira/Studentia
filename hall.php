@@ -3,7 +3,9 @@
     $roll=$_GET['roll'];
     $sem=$_GET['sem'];
 
-    $queryinfo = "select student.Fname, student.Mname, student.Lname, student.Education_year, student.Program from student where student.Roll_no='$roll';";
+    $queryinfo = "select student.Fname, student.Mname, student.Lname, student.Education_year, program.P_name from student
+                  inner join program on program.P_id=student.Program
+                  where student.Roll_no='$roll';";
     $resultinfo = mysqli_query($connection,$queryinfo) or die ("Error in query: ".$queryinfo." ".mysqli_connect_error());
 
     if($resultinfo)
@@ -18,18 +20,24 @@
 ?>
 <html lang="en" dir="ltr">
   <head>
+    <title>Studentia Hallticket</title>
+    <link rel="icon"
+      type="image/png"
+      href="images/logo-fav.png">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
     <link rel="stylesheet" href="Studentia.css">
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,300&display=swap" rel="stylesheet">
   </head>
   <body>
-    <div class="container" id="resBorder">
+ <div class="container" id="resBorder">
       <div class="row mb-3"><center><h2>Hall Ticket</h2></center></div>
+      <div class="row">   <div class="col-6" style="width: 60%;">
       <div class="row mb-3">Name: <?php echo " ".$row[0]." ".$row[1]." ".$row[2];?></div>
       <div class="row mb-3">Roll no: <?php echo " $roll";?></div>
       <div class="row mb-3">Program: <?php echo " ".$row[4];?></div>
       <div class="row mb-3">Semester:<?php echo " $sem";?> </div>
+    </div><div class="col-1"></div><div id="stimg" class="col-5">Paste Photo here</div></div>
       <div class="row mb-3">
         <table class="table table-striped" id="studgrade">
           <tr>
