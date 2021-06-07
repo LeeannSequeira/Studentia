@@ -451,7 +451,7 @@ return d.toISOString().slice(0,10) === dateString;
                   <div id="st-addform"><form id="addcourse-admin" name="addst" action="student-incharge.php" method="POST" onSubmit="return validateAddStudent()">
                     <div class="row mb-3"><div class="col-6">Roll No.</div><div class="col-6"><input class="roundedinput" type="text" name="sroll" required></div></div>
                     <div class="row mb-3"><div class="col-6">First Name</div><div class="col-6"><input class="roundedinput" type="text" name="sfname" required></div></div>
-                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname" required></div></div>
+                    <div class="row mb-3"><div class="col-6">Middle Name</div><div class="col-6"><input class="roundedinput" type="text" name="smname" ></div></div>
                     <div class="row mb-3"><div class="col-6">Last Name</div><div class="col-6"><input class="roundedinput" type="text" name="slname"></div></div>
                     <div class="row mb-3"><div class="col-6">Date of Joining(yyyy-mm-dd)</div><div class="col-6"><input class="roundedinput" type="date" name="sjdate" required></div></div>
                     <div class="row mb-3"><div class="col-6">Program</div>
