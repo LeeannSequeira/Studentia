@@ -193,27 +193,20 @@ include "Db_Connection.php"; // db connection
                                           inner join student using(Roll_no)
                                           where semester_courses.Sem_id=$sid and semester_courses.Prog_id=$pid and enroll.Roll_no='$r';";
                           $resultInsertSem = mysqli_query($connection,$queryInsertSem) or die ("Error in query: ".$queryInsertSem." ".mysqli_connect_error());
-                          while($rowspi= mysqli_fetch_row($resultInsertSem))
-                          {$spi=$rowspi[0];
+                          $rowspi= mysqli_fetch_row($resultInsertSem);
+                          $spi=intval($rowspi[0]);
                           if($spi)
                           {
-                          $queryInsertSpi="Update student_spi set SPI= $spi where Roll_no='$r' and Sem_id=$sid;";
+                          $queryInsertSpi="Update student_spi set SPI=".$rowspi[0]."where Roll_no='$r' and Sem_id=$sid;";
                           $resultInsertSpi = mysqli_query($connection,$queryInsertSpi) or die ("Error in query: ".$queryInsertSpi." ".mysqli_connect_error());
-                        }
-
                         }
                         //CPI CALCULATION
                         $queryGetSpi = "select sum(SPI)/count(SPI) from student_spi where Roll_no='$r';";
                         $resultGetSpi = mysqli_query($connection,$queryGetSpi) or die ("Error in query: ".$queryGetSpi." ".mysqli_connect_error());
                         $rowcpi= mysqli_fetch_row($resultGetSpi);
-                        $cpi=$rowcpi[0];
-                        if($cpi)
-                        {
-                        $queryEnterCpi = "update student set CPI=$cpi where Roll_no='$r';";
+
+                        $queryEnterCpi = "update student set CPI=".$rowcpi[0]." where Roll_no='$r';";
                         $resultEnterCpi = mysqli_query($connection,$queryEnterCpi) or die ("Error in query: ".$queryEnterCpi." ".mysqli_connect_error());
-
-
-                        }
                         }
                       }
                     }
