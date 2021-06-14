@@ -12,7 +12,7 @@ include "Db_Connection.php"; // db connection
     $resultinfo = mysqli_query($connection,$queryinfo) or die ("Error in query: ".$queryinfo." ".mysqli_connect_error());
 
     if($resultinfo )
-    {$row=mysqli_fetch_row($resultinfo);}
+    {$row=mysqli_fetch_row($resultinfo);
     //{echo "<script>alert('Marks successfully Updated');</script>";}
 
 ?>
@@ -47,15 +47,20 @@ include "Db_Connection.php"; // db connection
                             inner join course on course.C_id=semester_courses.Course_id
                             where Prog_id=".$row[6]." and semester_courses.Sem_id=$sem and Roll_no='$roll';";
             $resultsemcours = mysqli_query($connection,$querysemcours) or die ("Error in query: ".$querysemcours." ".mysqli_connect_error());
+            $count=0;
             while($rowCours=mysqli_fetch_row($resultsemcours))
             {
               echo "<tr>";
               echo "<td>".$rowCours[0]."</td>";
               echo "<td>".$rowCours[1]."</td>";
               echo "</tr>";
+              if($rowCours[1]=='F')
+              {
+                $count=$count+1;
+              }
             }
 
-              if(($rowCours[1]=='F')||($row[5]<4.0))
+              if(($count>0)||($row[5]<4.0))
               {
                 $resultdec="FAIL";
               }
@@ -79,7 +84,7 @@ include "Db_Connection.php"; // db connection
        }
        ?>
         <div class="col-4">
-          Result: <?php echo " $resultdec";?>
+          Result: <?php echo " $resultdec";}?>
         </div>
       </div>
     </div>

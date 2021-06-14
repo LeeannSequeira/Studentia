@@ -81,7 +81,7 @@ include "Db_Connection.php"; // db connection
               $prog = $_POST["sprog"];
               $class = $_POST["sclass"];
               $semester=$_POST["sem"];
-
+              $rc=0;
               $queryGetRoll = "Select Roll_no from student;";
               $resultGetRoll = mysqli_query($connection,$queryGetRoll) or die ("Error in query: ".$queryGetRoll." ".mysqli_connect_error());
               if(mysqli_num_rows($resultGetRoll)>0)
@@ -105,11 +105,11 @@ include "Db_Connection.php"; // db connection
                       $resultCourseTotal = mysqli_query($connection,$queryCourseTotal) or die ("Error in query: ".$queryCourseTotal." ".mysqli_connect_error());
                       $resc=mysqli_fetch_row($resultCourseTotal);
                       $rc=intval($resc[0]);
+
                       //insert Grade into enroll
                       if(($rc>=85)&&($rc<=100))
                       {
                         $queryEnrollGrade="update enroll set Course_grade='O', Grade_point=10 where Roll_no='$r' and C_id=$c;";
-
                       }
                       else if(($rc>=75)&&($rc<85))
                       {
@@ -143,7 +143,7 @@ include "Db_Connection.php"; // db connection
                         $rowent= mysqli_fetch_row($resultpEntitlement);
                         $ent=$rowent[0];
 
-                        if($ent>0 && $counter<1)
+                        if(($ent>0) && ($counter<1)&&($rc))
                         {
                           $rc=$rc+$ent;
                           if(($rc>=50)&&($rc<55))
