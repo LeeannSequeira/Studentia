@@ -1,3 +1,10 @@
+/**
+ * Author:    Leeann Sequeira
+ *
+ * Last update Date: 8th August 2021
+ *
+ **/
+
 <?php
 include "Db_Connection.php"; // db connection
 if(isset($_POST["rbutton"]))
@@ -191,7 +198,7 @@ include "Db_Connection.php"; // db connection
               <!--________________________________________________________________Empty For Layout_______-->
             </div>
             <div class="col-4"><!--ADD------------------------------------------------------------------------------------------------------->
-              
+
             </div>
           <div class="searchresults">
             <?php

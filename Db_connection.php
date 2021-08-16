@@ -1,3 +1,10 @@
+/**
+ * Author:    Leeann Sequeira
+ *
+ * Last update Date: 8th August 2021
+ *
+ **/
+
 <?php
 //specify database server information
 $server ="localhost";

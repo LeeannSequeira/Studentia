@@ -1,3 +1,10 @@
+/**
+ * Author:    Leeann Sequeira
+ *
+ * Last update Date: 8th August 2021
+ *
+ **/
+
 <?php
 include "Db_Connection.php"; // Using database connection file here
 //variables retrieved from form are copied into simpler variable names
